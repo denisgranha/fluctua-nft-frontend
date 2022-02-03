@@ -5,19 +5,8 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 
-import Fortmatic from 'fortmatic';
-import { ethers } from "ethers";
+import WalletService from '../services/wallet-service'
 
-const customNodeOptions = {
-    rpcUrl: process.env.REACT_APP_NODE_URL, // your own node url
-    chainId: process.env.REACT_APP_CHAIN_ID
-  }
-  
-  const fm = new Fortmatic(process.env.REACT_APP_FORTMATIC_API_KEY, customNodeOptions);
-  const provider = new ethers.providers.Web3Provider(fm.getProvider())
-  
-  // Request user login if needed, returns current user account address
-  // provider.provider.enable();
 
 class Header extends React.Component {
 
@@ -29,9 +18,9 @@ class Header extends React.Component {
     }
   
     async loginFortmatic(){
-      const accounts = await provider.provider.enable();
-      this.setState({coinbase: accounts[0]});
-      console.log(accounts[0])
+      const coinbase = await WalletService.login();
+      this.setState({coinbase});
+      console.log(coinbase)
       
     }
   
