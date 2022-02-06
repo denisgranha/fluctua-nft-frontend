@@ -11,6 +11,7 @@ import NFTDetails from './NFTDetails';
 import ClaimDetails from './ClaimDetails'
 
 import Header from './components/Header'
+import NFTMinting from './NFTMinting';
 
 const darkTheme = createTheme({
   palette: {
@@ -29,6 +30,7 @@ export default function App(){
             <Route path="/" element={<Dashboard />} />
             <Route path="/nft/:id" element={<NFTDetails />} />
             <Route path="/claim/:id" element={<ClaimDetails />} />
+            <Route path="/mint/" element={<NFTMinting />}></Route>
           </Routes>
         </Container>
       </ThemeProvider>

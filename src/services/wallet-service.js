@@ -16,24 +16,35 @@ const provider = new ethers.providers.Web3Provider(fm.getProvider())
 const login = async () => {
 
     let coinbase; // Main account
-    // If account already in localstorage, don't request it.
-    coinbase = localStorage.getItem("coinbase")
+    let userEmail;
+    const accounts = await provider.provider.enable();
+    coinbase = accounts[0]
 
-    if(!coinbase){
-        const accounts = await provider.provider.enable();
-        coinbase = accounts[0]
-        // Save in localstorage
-        localStorage.setItem("coinbase", coinbase)
-    }
+    let userData = await fm.user.getUser();
+    userEmail = userData.email;
 
-    return coinbase;
+    // Save in localstorage
+    localStorage.setItem("coinbase", coinbase)
+    localStorage.setItem("userEmail", userData.email)
+
+    return {coinbase, userEmail};
 }
 
-const logout = () => {
+const logout = async () => {
     localStorage.removeItem("coinbase")
+    localStorage.removeItem("userEmail")
+    await fm.user.logout();
 }
 
-const signEmailAndSpotify = async ({email, wallet, spotifyId}) => {
+// This is a light check, for a proper login check, you must check through formatic
+const isLoggedIn = () => {
+    return {
+        coinbase: localStorage.getItem("coinbase"),
+        userEmail: localStorage.getItem("userEmail")
+    }
+}
+
+const signEmail = async ({email}) => {
 
     // Check it's logged in.
     if (!(await fm.user.isLoggedIn())){
@@ -47,16 +58,12 @@ const signEmailAndSpotify = async ({email, wallet, spotifyId}) => {
 
     const types = {
         Person: [
-            { name: 'email', type: 'string' },
-            { name: 'wallet', type: 'address' },
-            { name: 'spotifyId', type: 'string'}
+            { name: 'email', type: 'string' }
         ]
     };
 
     const values = {
-        email,
-        wallet,
-        spotifyId,
+        email
     }
 
     const signer = provider.getSigner()
@@ -67,7 +74,9 @@ const signEmailAndSpotify = async ({email, wallet, spotifyId}) => {
 
 const exportedFunctions = {
     login,
-    signEmailAndSpotify
+    logout,
+    isLoggedIn,
+    signEmail
 }
 
 export default exportedFunctions

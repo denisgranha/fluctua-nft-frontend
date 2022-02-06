@@ -13,19 +13,27 @@ class Header extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-        coinbase: null
+        coinbase: null,
+        email: null,
       }
+    }
+
+    async componentDidMount(){
+      const {coinbase, userEmail} = await WalletService.isLoggedIn()
+      this.setState({coinbase, userEmail})
+      console.log(coinbase, userEmail)
     }
   
     async loginFortmatic(){
-      const coinbase = await WalletService.login();
-      this.setState({coinbase});
-      console.log(coinbase)
+      const {coinbase, email} = await WalletService.login();
+      this.setState({coinbase, email});
+      console.log(coinbase, email)
       
     }
   
-    logout(){
-      this.setState({coinbase: null})
+    async logout(){
+      this.setState({coinbase: null, email: null})
+      await WalletService.logout();
     }
 
     render(){
@@ -37,7 +45,7 @@ class Header extends React.Component {
                   Fluctua NFT's
                 </Typography>
                 {this.state.coinbase?
-                  <Button color="inherit" onClick={this.logout.bind(this)}>Logout</Button>: 
+                  <div><span>{this.state.userEmail}</span><Button color="inherit" onClick={this.logout.bind(this)}>Logout</Button></div>: 
                   <Button color="inherit" onClick={this.loginFortmatic.bind(this)}>Login</Button>
                 }            
               </Toolbar>
