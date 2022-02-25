@@ -44,6 +44,7 @@ class NFTMinting extends React.Component {
     render(){
         return (
             <div>
+                <span>{this.state.signature}</span>
                 {this.state.showAnimation?<Img src="/img/NFT_animation.gif"></Img>:''}
             </div>
         )
