@@ -21,7 +21,7 @@ export default function NFTList(){
             console.log(response.data.results)
             setNfts(response.data.results)
         })
-    }, [])
+    }, [nftTypeId])
     
     return (
         <div>

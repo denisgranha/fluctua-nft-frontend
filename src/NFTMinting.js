@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {
     useSearchParams,
-    useNavigate
 } from "react-router-dom";
 
 import WalletService from './services/wallet-service'
@@ -21,53 +20,52 @@ export default function NFTMinting(){
     const [progress, setProgress] = useState(0)
     const [loadingSigning, setLoadingSigning] = useState(true)
 
-    const [searchParams, setSearchParams] = useSearchParams();
-    const history = useNavigate();
-
+    const [searchParams] = useSearchParams();
+    // const history = useNavigate();
     const spotifyToken = searchParams.get("code")
     const nft = searchParams.get("state")
 
-    function claimNFT(proof){
-        const {coinbase, userEmail} = WalletService.isLoggedIn()
-        axios.post(`${backendURL}/nfts/spotify-pre-saves/`, {email: userEmail, ethereumAddress: coinbase, proof, spotifyToken, nft})
-        .then(response => {
-            setProgress(20)
-            // from now on, monitor claim tx, and adapt progress accordingly
-            checkClaimStatus()
-        }, (error) => {
-            alert("Server Error: " + JSON.stringify(error.response.data))
-        })
-    }
-
-    function checkClaimStatus(){
-        const {coinbase, userEmail} = WalletService.isLoggedIn()
-        axios.get(`${backendURL}/nfts/claims/?user__email=${userEmail}`)
-        .then((response) => {
-            const nftClaim = response.data.results[0]
-
-            if(nftClaim.isMined){
-                setProgress(100)
-            }
-            else if(nftClaim.txHash){
-                // depending on how long ago, set progress accordingly
-                setProgress(60)
-                setTimeout(checkClaimStatus, 2000)
-            }
-            else {
-                setProgress(30)
-                setTimeout(checkClaimStatus, 1000)
-            }
-        }, (error) => {
-            setTimeout(checkClaimStatus, 1000)
-        })
-    }
-
     useEffect(() => {
+
+        function claimNFT(proof){
+            const {coinbase, userEmail} = WalletService.isLoggedIn()
+            axios.post(`${backendURL}/nfts/spotify-pre-saves/`, {email: userEmail, ethereumAddress: coinbase, proof, spotifyToken, nft})
+            .then(() => {
+                setProgress(20)
+                // from now on, monitor claim tx, and adapt progress accordingly
+                checkClaimStatus()
+            }, (error) => {
+                alert("Server Error: " + JSON.stringify(error.response.data))
+            })
+        }
+    
+        function checkClaimStatus(){
+            const {userEmail} = WalletService.isLoggedIn()
+            axios.get(`${backendURL}/nfts/claims/?user__email=${userEmail}`)
+            .then((response) => {
+                const nftClaim = response.data.results[0]
+    
+                if(nftClaim.isMined){
+                    setProgress(100)
+                }
+                else if(nftClaim.txHash){
+                    // depending on how long ago, set progress accordingly
+                    setProgress(60)
+                    setTimeout(checkClaimStatus, 2000)
+                }
+                else {
+                    setProgress(30)
+                    setTimeout(checkClaimStatus, 1000)
+                }
+            }, () => {
+                setTimeout(checkClaimStatus, 1000)
+            })
+        }
         async function initMinting(){
             // Get NFT id through query param state
 
             // Get email and login
-            const {coinbase, userEmail} = await WalletService.login()
+            const {userEmail} = await WalletService.login()
 
             // Set some sleep between functions, formatic is a bit buggy
             setTimeout(async () => {
@@ -86,7 +84,7 @@ export default function NFTMinting(){
 
         initMinting()
         
-    }, [])
+    }, [spotifyToken, nft])
 
     const nftCard = (
         <div>

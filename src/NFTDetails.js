@@ -24,7 +24,7 @@ export default function NFTDetails(){
             console.log(response.data.results)
             setNft(response.data.results[0])
         })
-    }, [])
+    }, [nftId])
 
     return (
         <div>

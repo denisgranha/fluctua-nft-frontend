@@ -25,7 +25,7 @@ export default function Header(){
 
   useEffect(() => {
     async function initLogin(){
-      const {coinbase, userEmail} = await WalletService.isLoggedIn()
+      const {coinbase} = await WalletService.isLoggedIn()
       setCoinbase(coinbase)
     }
     initLogin()
