@@ -55,9 +55,9 @@ export default function App(){
         <Header></Header>
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/nft/:id" element={<NFTDetails />} />
-            <Route path="/nft-by-type/:id" element={<NFTList />} />
-            <Route path="/claim/:id" element={<ClaimDetails />} />
+            <Route path="/nft/:nftId" element={<NFTDetails />} />
+            <Route path="/nft-by-type/:nftTypeId" element={<NFTList />} />
+            <Route path="/claim/:nftId" element={<ClaimDetails />} />
             <Route path="/mint/" element={<NFTMinting />}></Route>
           </Routes>
         </Container>

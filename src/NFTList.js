@@ -12,11 +12,11 @@ const backendURL = process.env.REACT_APP_BACKEND_URL
 
 export default function NFTList(){
 
-    let { id } = useParams();
+    let { nftTypeId } = useParams();
     const [nfts, setNfts] = useState([])
 
     useEffect(() => {
-        axios.get(`${backendURL}/nfts/?nft_type=${id}`)
+        axios.get(`${backendURL}/nfts/?nft_type=${nftTypeId}`)
         .then(response => {
             console.log(response.data.results)
             setNfts(response.data.results)

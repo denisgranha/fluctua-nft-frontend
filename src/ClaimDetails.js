@@ -12,8 +12,8 @@ let paramsObj = {
 };
 
 export default function ClaimDetails(){
-    let { id } = useParams();
-    paramsObj.state = id;
+    let { nftId } = useParams();
+    paramsObj.state = nftId;
     let searchParams = new URLSearchParams(paramsObj);
     return (
         <div>

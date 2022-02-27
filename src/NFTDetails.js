@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import {
     useParams,
     useNavigate
@@ -5,47 +6,51 @@ import {
 
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button"
+import Typography from '@mui/material/Typography';
+import NFTCard from "./components/NFTCard";
 
-// @TODO load real data from backend
-// @TODO, progressive loading
-import NFTs from "./NFTs.json"
-import { styled } from '@mui/material/styles';
+const axios = require('axios').default;
+const backendURL = process.env.REACT_APP_BACKEND_URL
 
-
-const Img = styled('img')({
-    margin: 'auto',
-    display: 'block',
-    maxWidth: '100%',
-    maxHeight: '100%',
-  });
 
 export default function NFTDetails(){
-    let { id } = useParams();
+    let { nftId } = useParams();
     const history = useNavigate();
+    const [nft, setNft] = useState([])
+
+    useEffect(() => {
+        axios.get(`${backendURL}/nfts/?contract_id=${nftId}`)
+        .then(response => {
+            console.log(response.data.results)
+            setNft(response.data.results[0])
+        })
+    }, [])
 
     return (
-        <Grid 
+        <div>
+            <Typography variant="h4" component="div">
+            {nft.name}
+            </Typography>
+            <Grid 
             container
-            direction="column"
             justifyContent="center"
             alignItems="center">
-            <Grid item xs={12} lg={4} md={6}>
-                <Img src={NFTs[id].image}></Img>
+                <Grid item xs={12} lg={4} md={6}>
+                    <NFTCard
+                    image={`https://${nft.imageIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
+                    imageLowRes={`https://${nft.imageLowResIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
+                    />
+                </Grid>
             </Grid>
-            <Grid item>
-                <h1>
-                    {NFTs[id].title}
-                </h1>
-                <div>
-                    {NFTs[id].description}
-                </div>
-                <div>
-                <Button variant="contained" onClick={() => {history(`/claim/${id}`)}}>
-                    CLAIM
-                </Button>
-                </div>
-            </Grid>
-        </Grid>
+            <div>
+                        {nft.description}
+                    </div>
+                    <div>
+                    <Button variant="contained" onClick={() => {history(`/claim/${nft.contractId}`)}}>
+                        CLAIM
+                    </Button>
+                    </div>
+        </div>
     )
 
 }

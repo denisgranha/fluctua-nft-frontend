@@ -46,10 +46,13 @@ const isLoggedIn = () => {
 
 const signEmail = async ({email}) => {
 
+    
     // Check it's logged in.
     if (!(await fm.user.isLoggedIn())){
+        console.log("user not logged in, login for signing")
         await login()
     }
+    console.log("user ready to sign")
 
     const domain = {
         name: 'Fluctua Records NFTs',

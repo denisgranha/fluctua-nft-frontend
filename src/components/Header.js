@@ -7,31 +7,29 @@ import Box from '@mui/material/Box';
 
 import WalletService from '../services/wallet-service'
 
-const loginFortmatic = async () => {
-  const {coinbase, email} = await WalletService.login();
-  this.setState({coinbase, email});
-  console.log(coinbase, email)
-  
-}
-
-const logout = async () => {
-  this.setState({coinbase: null, email: null})
-  await WalletService.logout();
-}
-
 export default function Header(){
   const history = useNavigate();
   const [coinbase, setCoinbase] = useState()
-  const [email, setEmail] = useState()
+
+  async function loginFortmatic(){
+    const {coinbase, userEmail} = await WalletService.login();
+    setCoinbase(coinbase)
+    console.log(coinbase, userEmail)
+    
+  }
+  
+  async function logout(){
+    setCoinbase(null)
+    await WalletService.logout();
+  }
 
   useEffect(() => {
     async function initLogin(){
-      const {_coinbase, _email} = await WalletService.isLoggedIn()
-      setCoinbase(_coinbase)
-      setEmail(_email)
+      const {coinbase, userEmail} = await WalletService.isLoggedIn()
+      setCoinbase(coinbase)
     }
     initLogin()
-  })
+  }, [])
 
   return (
   <Box sx={{ flexGrow: 1 }}>

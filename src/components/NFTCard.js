@@ -16,6 +16,7 @@ const CardActionAreaActionArea = styled(CardActionArea)(() => ({
     minWidth: 256,
     borderRadius: 0,
     boxShadow: "none",
+    background: "#F6EEEA",
     "&:hover": {
       boxShadow: `0 6px 12px 0 ${Color(color).rotate(-12).darken(0.2).fade(0.5)}`,
     },
