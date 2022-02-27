@@ -1,28 +1,55 @@
 import React from "react";
 
 import Grid from "@mui/material/Grid";
+import Typography from '@mui/material/Typography';
 
 import NFTCard from "./components/NFTCard";
 
-// @TODO load real data from backend
-// @TODO, progressive loading
-import NFTs from "./NFTs.json"
 
-export default function Dashboard() {
+const axios = require('axios').default;
+const backendURL = process.env.REACT_APP_BACKEND_URL
 
-  return (
-    <Grid container spacing={4}>
-      {NFTs.map(nft => (
-        <Grid item xs={12} sm={6} lg={4} key={nft.id}>
-          <NFTCard
-            destinationPath={`/nft/${nft.id}`}
-            color={nft.color}
-            title={nft.title}
-            subtitle={nft.description}
-            image={nft.image}
-          />
-        </Grid>
-      ))}
-    </Grid>
-  );
+class Dashboard extends React.Component {
+
+  constructor(props){
+    super(props)
+    this.state = {
+      nftTypes: []
+    }
+  }
+
+  componentDidMount(){
+    axios.get(`${backendURL}/nfts/types/`)
+    .then(response => {
+      console.log(response)
+      this.setState({nftTypes: response.data.results})
+    })
+  }
+
+  
+  render(){
+    return (
+      <div>
+        <Typography variant="h4" component="div">
+          choose your RUMIA character
+        </Typography>
+        <Grid container spacing={4} columns={10}>
+        {this.state.nftTypes.map(nftType => (
+          <Grid item xs={12} sm={6} lg={3} xl={2} key={nftType.id}>
+            <NFTCard
+              destinationPath={`/nft-by-type/${nftType.id}`}
+              color={nftType.backgroundColor}
+              title={nftType.name}
+              subtitle={nftType.description}
+              image={`https://${nftType.representativeImageIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
+              imageLowRes={`https://${nftType.representativeImageLowResIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
+            />
+          </Grid>
+        ))}
+      </Grid>
+      </div>
+    )
+  }
 }
+
+export default Dashboard

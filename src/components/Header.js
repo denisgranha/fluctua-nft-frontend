@@ -1,5 +1,5 @@
-import React from 'react';
-import AppBar from '@mui/material/AppBar';
+import React, {useEffect, useState} from 'react';
+import {useNavigate} from "react-router-dom";
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -7,52 +7,47 @@ import Box from '@mui/material/Box';
 
 import WalletService from '../services/wallet-service'
 
-
-class Header extends React.Component {
-
-    constructor(props) {
-      super(props);
-      this.state = {
-        coinbase: null,
-        email: null,
-      }
-    }
-
-    async componentDidMount(){
-      const {coinbase, userEmail} = await WalletService.isLoggedIn()
-      this.setState({coinbase, userEmail})
-      console.log(coinbase, userEmail)
-    }
+const loginFortmatic = async () => {
+  const {coinbase, email} = await WalletService.login();
+  this.setState({coinbase, email});
+  console.log(coinbase, email)
   
-    async loginFortmatic(){
-      const {coinbase, email} = await WalletService.login();
-      this.setState({coinbase, email});
-      console.log(coinbase, email)
-      
-    }
-  
-    async logout(){
-      this.setState({coinbase: null, email: null})
-      await WalletService.logout();
-    }
-
-    render(){
-        return (
-        <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static">
-              <Toolbar>
-                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                  Fluctua NFT's
-                </Typography>
-                {this.state.coinbase?
-                  <div><span>{this.state.userEmail}</span><Button color="inherit" onClick={this.logout.bind(this)}>Logout</Button></div>: 
-                  <Button color="inherit" onClick={this.loginFortmatic.bind(this)}>Login</Button>
-                }            
-              </Toolbar>
-            </AppBar>
-        </Box>
-        );
-    }
 }
 
-export default Header;
+const logout = async () => {
+  this.setState({coinbase: null, email: null})
+  await WalletService.logout();
+}
+
+export default function Header(){
+  const history = useNavigate();
+  const [coinbase, setCoinbase] = useState()
+  const [email, setEmail] = useState()
+
+  useEffect(() => {
+    async function initLogin(){
+      const {_coinbase, _email} = await WalletService.isLoggedIn()
+      setCoinbase(_coinbase)
+      setEmail(_email)
+    }
+    initLogin()
+  })
+
+  return (
+  <Box sx={{ flexGrow: 1 }}>
+      <Toolbar >
+      <Button sx={{ flexGrow: 1 }} color="inherit" onClick={() => {
+            history("/")
+          }}>
+        <Typography variant="h1" component="div">
+            Fluctua NFT's
+        </Typography>
+        </Button>
+        {coinbase?
+          <Button color="inherit" onClick={logout}>Logout</Button>: 
+          <Button color="inherit" onClick={loginFortmatic}>Login</Button>
+        }            
+      </Toolbar>
+  </Box>
+  );
+}
