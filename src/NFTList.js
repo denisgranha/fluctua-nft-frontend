@@ -5,7 +5,7 @@ import {
 
 import Grid from "@mui/material/Grid";
 import Typography from '@mui/material/Typography';
-import NFTCard from "./components/NFTCard";
+import {NFTCardWithoutLink, NFTCard} from "./components/NFTCard";
 
 const axios = require('axios').default;
 const backendURL = process.env.REACT_APP_BACKEND_URL
@@ -22,6 +22,24 @@ export default function NFTList(){
             setNfts(response.data.results)
         })
     }, [nftTypeId])
+
+    function claimedCard(nft){
+        return (
+            <NFTCardWithoutLink
+            image={`https://${nft.imageIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
+            disable={true}
+            imageLowRes={`https://${nft.imageLowResIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
+        />
+        )
+    }
+
+    function regularCard(nft){
+        return (<NFTCard
+            destinationPath={`/nft/${nft.contractId}`}
+            image={`https://${nft.imageIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
+            imageLowRes={`https://${nft.imageLowResIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
+        />)
+    }
     
     return (
         <div>
@@ -35,11 +53,7 @@ export default function NFTList(){
             <Grid container spacing={2} columns={10} style={{paddingTop: "2rem"}}>
             {nfts.map(nft => (
             <Grid item xs={12} sm={5} lg={3} xl={2} key={nft.contractId}>
-                <NFTCard
-                destinationPath={`/nft/${nft.contractId}`}
-                image={`https://${nft.imageIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
-                imageLowRes={`https://${nft.imageLowResIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
-                />
+                {nft.isClaimed?claimedCard(nft):regularCard(nft)}
             </Grid>
             ))}
         </Grid>

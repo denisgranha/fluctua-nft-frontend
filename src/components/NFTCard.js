@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import Color from "color"; // v3.2.1
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
@@ -8,17 +7,17 @@ const CardActionAreaActionArea = styled(CardActionArea)(() => ({
     borderRadius: 0,
   }));
   
-  const StyledCard = styled(Card)(({ color }) => ({
+  const StyledCard = styled(Card)(() => ({
     minWidth: 256,
     borderRadius: 0,
     boxShadow: "none",
     background: "#F6EEEA",
     "&:hover": {
-      boxShadow: `0 6px 12px 0 ${Color(color).rotate(-12).darken(0.2).fade(0.5)}`,
+      boxShadow: `0 6px 12px 0`,
     },
   }));
 
-  const StyledCardNoLink = styled(Card)(({ color }) => ({
+  const StyledCardNoLink = styled(Card)(() => ({
     minWidth: 256,
     borderRadius: 0,
     boxShadow: "none",
@@ -54,12 +53,13 @@ const CardActionAreaActionArea = styled(CardActionArea)(() => ({
   const NFTCardWithoutLink = ({
     image,
     title,
-    imageLowRes
+    imageLowRes,
+    disable
   }) => {
     
     return (
       <StyledCardNoLink >
-        <Img src={image} alt={title} />
+        <Img src={image} alt={title} sx={disable?{filter: "brightness(50%);"}:{}}/>
       </StyledCardNoLink>
   )};
 
