@@ -9,6 +9,52 @@ const customNodeOptions = {
     rpcUrl: process.env.REACT_APP_NODE_URL, // your own node url
     chainId: process.env.REACT_APP_CHAIN_ID
 }
+
+const nftAbi = [
+    {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          }
+        ],
+        "name": "balanceOf",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "index",
+            "type": "uint256"
+          }
+        ],
+        "name": "tokenOfOwnerByIndex",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+];
   
 const fm = new Fortmatic(process.env.REACT_APP_FORTMATIC_API_KEY, customNodeOptions);
 const provider = new ethers.providers.Web3Provider(fm.getProvider())
@@ -75,11 +121,26 @@ const signEmail = async ({email}) => {
     return signature;
 }
 
+async function getNfts(owner){
+    const nftContract = await (new ethers.Contract(process.env.REACT_APP_NFT_CONTRACT, nftAbi, provider));
+    
+    const nftsCount = await nftContract.balanceOf(owner)
+
+    let nftIds = []
+    for(let index=0; index <nftsCount.toNumber(); index++){
+        const nft = await nftContract.tokenOfOwnerByIndex(owner, index)
+        nftIds.push(nft.toNumber())
+    }
+
+    return nftIds
+}
+
 const exportedFunctions = {
     login,
     logout,
     isLoggedIn,
-    signEmail
+    signEmail,
+    getNfts
 }
 
 export default exportedFunctions
