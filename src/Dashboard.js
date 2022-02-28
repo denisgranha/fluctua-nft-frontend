@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import Grid from "@mui/material/Grid";
 import Typography from '@mui/material/Typography';
 import { Divider } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 
 import NFTCard from "./components/NFTCard";
 import WalletService from "./services/wallet-service"
@@ -20,6 +21,8 @@ export default function Dashboard(){
   const [nftTypes, setNftTypes] = useState([])
   const [ownedNftIds, setOwnedNftIds] = useState([])
   const [ownedNfts, setOwnedNfts] = useState([])
+  const [userClaims, setUserClaims] = useState([])
+  let potentialNftsFound, showOwnedNftsView, selectNFTView
 
   useEffect(() => {
     axios.get(`${backendURL}/nfts/types/`)
@@ -29,7 +32,17 @@ export default function Dashboard(){
 
     async function checkBalance(){
       // Check if user holds any nft, by looking at the contract
-      const {coinbase} = WalletService.isLoggedIn()
+      const {coinbase, userEmail} = WalletService.isLoggedIn()
+
+      if(userEmail){
+        // If user has any token claim, it might have the token, so we warn the user to hold on, as it takes a few seconds
+        // Blockchain is slow
+        axios.get(`${backendURL}/nfts/claims/?user__email=${userEmail}`)
+        .then(response => {
+          setUserClaims(response.data.results)
+        })
+      }
+
       if (coinbase){
         const nftIds = await WalletService.getNfts(coinbase)
         setOwnedNftIds(nftIds)
@@ -49,59 +62,75 @@ export default function Dashboard(){
     }
   }, [ownedNftIds])
 
-  console.log(ownedNfts)
-
-  const selectNFTView = (<div>
-    <Grid container spacing={4} columns={12}>
-      <Grid item xs={12} sm={12} xl={11} lg={11}>
-        <Typography variant="h4" component="div">
-          choose your RUMIA character
-        </Typography>
-      </Grid>
-    </Grid>
-    <Grid container spacing={4} columns={10}  style={{paddingTop: "5rem"}}>
-    {nftTypes.map(nftType => (
-      <Grid item xs={12} sm={6} lg={3} xl={2} key={nftType.id}>
-        <NFTCard
-          destinationPath={`/nft-by-type/${nftType.id}`}
-          color={nftType.backgroundColor}
-          title={nftType.name}
-          subtitle={nftType.description}
-          image={`https://${nftType.representativeImageIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
-          imageLowRes={`https://${nftType.representativeImageLowResIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
-        />
-      </Grid>
-    ))}
-  </Grid>
-  </div>
-  )
-
-  const showOwnedNftsView = (
+  if(!userClaims.length && !ownedNfts.length){
+    selectNFTView = (
     <div>
-            <Grid container spacing={4} columns={12}>
-                <Grid item xs={12} sm={12} xl={11} lg={11}>
-                    <Typography variant="h4" component="div">
-                    your owned RUMIA NFTs
-                    </Typography>
-                </Grid>
-            </Grid>
-            <Grid container spacing={2} columns={10} style={{paddingTop: "5rem"}}>
-            {ownedNfts.map(nft => (
-            <Grid item xs={12} sm={5} lg={3} xl={2} key={nft.contractId}>
-                <NFTCard
-                destinationPath={`/nft/${nft.contractId}`}
-                image={`https://${nft.imageIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
-                imageLowRes={`https://${nft.imageLowResIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
-                />
-            </Grid>
-            ))}
+      <Grid container spacing={4} columns={12}>
+        <Grid item xs={12} sm={12} xl={11} lg={11}>
+          <Typography variant="h4" component="div">
+            choose your RUMIA character
+          </Typography>
         </Grid>
+      </Grid>
+      <Grid container spacing={4} columns={10}  style={{paddingTop: "5rem"}}>
+        {nftTypes.map(nftType => (
+          <Grid item xs={12} sm={6} lg={3} xl={2} key={nftType.id}>
+            <NFTCard
+              destinationPath={`/nft-by-type/${nftType.id}`}
+              color={nftType.backgroundColor}
+              title={nftType.name}
+              subtitle={nftType.description}
+              image={`https://${nftType.representativeImageIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
+              imageLowRes={`https://${nftType.representativeImageLowResIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
+            />
+          </Grid>
+        ))}
+      </Grid>
+    </div>
+    )
+  }
+
+  if(ownedNfts.length){
+    showOwnedNftsView = (
+      <div>
+              <Grid container spacing={4} columns={12}>
+                  <Grid item xs={12} sm={12} xl={11} lg={11}>
+                      <Typography variant="h4" component="div">
+                      your owned RUMIA NFTs
+                      </Typography>
+                  </Grid>
+              </Grid>
+              <Grid container spacing={2} columns={10} style={{paddingTop: "5rem"}}>
+              {ownedNfts.map(nft => (
+              <Grid item xs={12} sm={5} lg={3} xl={2} key={nft.contractId}>
+                  <NFTCard
+                  destinationPath={`/nft/${nft.contractId}`}
+                  image={`https://${nft.imageIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
+                  imageLowRes={`https://${nft.imageLowResIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
+                  />
+              </Grid>
+              ))}
+          </Grid>
+          </div>
+    )
+  }
+
+  if(userClaims.length && !ownedNfts.length){
+    potentialNftsFound = (
+      <div>
+        <Typography variant="h4" component="div">
+        we noticed that you might have a NFT, wait a few seconds while we check it in the Blockchain
+        </Typography>
+        <CircularProgress></CircularProgress>
         </div>
-  )
+    )
+  }
 
   return (
     <div style={{paddingTop: "2rem"}}>
-      {ownedNfts.length? showOwnedNftsView :selectNFTView}
+      {potentialNftsFound}
+      {showOwnedNftsView}
+      {selectNFTView}
       <Divider style={{paddingTop: "5rem", borderColor: "#3D57A7"}}></Divider>
       <Typography variant="h4" component="div" style={{paddingTop: "5rem"}}>
         How it works
