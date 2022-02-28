@@ -93,7 +93,7 @@ export default function NFTMinting(){
 
         initMinting()
         
-    }, [spotifyToken, nft])
+    }, [spotifyToken, nft, history])
 
     const nftCard = (
         <div>
