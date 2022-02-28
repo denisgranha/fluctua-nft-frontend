@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {
     useSearchParams,
+    useNavigate,
 } from "react-router-dom";
 
 import WalletService from './services/wallet-service'
@@ -21,7 +22,7 @@ export default function NFTMinting(){
     const [loadingSigning, setLoadingSigning] = useState(true)
 
     const [searchParams] = useSearchParams();
-    // const history = useNavigate();
+    const history = useNavigate();
     const spotifyToken = searchParams.get("code")
     const nft = searchParams.get("state")
 
@@ -38,15 +39,23 @@ export default function NFTMinting(){
                 alert("Server Error: " + JSON.stringify(error.response.data))
             })
         }
+
+        function redirectAfterMinting(){
+            history(`/nft/${nft}/reveal`)
+        }
     
         function checkClaimStatus(){
             const {userEmail} = WalletService.isLoggedIn()
             axios.get(`${backendURL}/nfts/claims/?user__email=${userEmail}`)
             .then((response) => {
                 const nftClaim = response.data.results[0]
+                console.log(nftClaim)
     
-                if(nftClaim.isMined){
+                if(nftClaim.txMined){
                     setProgress(100)
+
+                    // Redirect after a 2s delay to the NFT view for unlocked content.
+                    setTimeout(redirectAfterMinting, 2000)
                 }
                 else if(nftClaim.txHash){
                     // @todo depending on how long ago, set progress accordingly
