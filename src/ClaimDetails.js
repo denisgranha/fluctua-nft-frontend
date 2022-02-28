@@ -24,8 +24,8 @@ export default function ClaimDetails(){
     paramsObj.state = nftId;
     let searchParams = new URLSearchParams(paramsObj);
     return (
-        <div style={{paddingTop: "3rem", width: "60vw"}}>
-            <Button variant="contained" onClick={() => {
+        <div style={{paddingTop: "3rem"}}>
+            <Button variant="contained" style={{width: "60vw"}} onClick={() => {
                 window.location.href = `${baseURL}${searchParams}`;
             }}>
                 claim your NFT
