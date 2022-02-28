@@ -6,10 +6,6 @@ import CardActionArea from "@mui/material/CardActionArea";
 
 const CardActionAreaActionArea = styled(CardActionArea)(() => ({
     borderRadius: 0,
-    // transition: "0.2s",
-    // "&:hover": {
-    //   transform: "scale(1.00)",
-    // },
   }));
   
   const StyledCard = styled(Card)(({ color }) => ({
@@ -20,6 +16,13 @@ const CardActionAreaActionArea = styled(CardActionArea)(() => ({
     "&:hover": {
       boxShadow: `0 6px 12px 0 ${Color(color).rotate(-12).darken(0.2).fade(0.5)}`,
     },
+  }));
+
+  const StyledCardNoLink = styled(Card)(({ color }) => ({
+    minWidth: 256,
+    borderRadius: 0,
+    boxShadow: "none",
+    background: "#F6EEEA",
   }));
 
   const Img = styled('img')({
@@ -48,4 +51,21 @@ const CardActionAreaActionArea = styled(CardActionArea)(() => ({
     </CardActionAreaActionArea>
   )};
 
+  const NFTCardWithoutLink = ({
+    image,
+    title,
+    imageLowRes
+  }) => {
+    
+    return (
+      <StyledCardNoLink >
+        <Img src={image} alt={title} />
+      </StyledCardNoLink>
+  )};
+
   export default NFTCard;
+
+  export {
+    NFTCardWithoutLink,
+    NFTCard
+  }

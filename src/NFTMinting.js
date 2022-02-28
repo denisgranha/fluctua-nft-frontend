@@ -4,7 +4,7 @@ import {
 } from "react-router-dom";
 
 import WalletService from './services/wallet-service'
-import NFTCard from "./components/NFTCard";
+import {NFTCardWithoutLink} from "./components/NFTCard";
 import Grid from "@mui/material/Grid";
 import LinearProgressWithLabel from "./components/LinearProgressWithLabel"
 import CircularProgress from '@mui/material/CircularProgress';
@@ -49,7 +49,7 @@ export default function NFTMinting(){
                     setProgress(100)
                 }
                 else if(nftClaim.txHash){
-                    // depending on how long ago, set progress accordingly
+                    // @todo depending on how long ago, set progress accordingly
                     setProgress(60)
                     setTimeout(checkClaimStatus, 2000)
                 }
@@ -97,7 +97,7 @@ export default function NFTMinting(){
             justifyContent="center"
             alignItems="center">
                 <Grid item xs={12} lg={6} md={6} xl={6}>
-                    <NFTCard image="/img/NFT_animation.gif"/>
+                    <NFTCardWithoutLink image="/img/NFT_animation.gif"/>
                 </Grid>
             </Grid>
         </div>

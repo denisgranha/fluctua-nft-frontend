@@ -25,9 +25,13 @@ export default function NFTList(){
     
     return (
         <div>
-            <Typography variant="h4" component="div">
-            choose your NFT color
-            </Typography>
+            <Grid container spacing={4} columns={12}>
+                <Grid item xs={12} sm={12} xl={11} lg={11}>
+                    <Typography variant="h4" component="div">
+                    choose your NFT color
+                    </Typography>
+                </Grid>
+            </Grid>
             <Grid container spacing={2} columns={10} style={{paddingTop: "2rem"}}>
             {nfts.map(nft => (
             <Grid item xs={12} sm={5} lg={3} xl={2} key={nft.contractId}>

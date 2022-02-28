@@ -21,7 +21,7 @@ const customTheme = createTheme({
     fontFamily: [
       'freight-micro-pro,serif',
     ].join(','),
-    h1: {
+    h2: {
       fontWeight: "600",
       color: "#3D57A7"
     },

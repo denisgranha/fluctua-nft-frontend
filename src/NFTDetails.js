@@ -7,7 +7,7 @@ import {
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button"
 import Typography from '@mui/material/Typography';
-import NFTCard from "./components/NFTCard";
+import {NFTCardWithoutLink} from "./components/NFTCard";
 
 const axios = require('axios').default;
 const backendURL = process.env.REACT_APP_BACKEND_URL
@@ -36,7 +36,7 @@ export default function NFTDetails(){
             justifyContent="center"
             alignItems="center">
                 <Grid item xs={12} lg={4} md={6}>
-                    <NFTCard
+                    <NFTCardWithoutLink
                     image={`https://${nft.imageIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
                     imageLowRes={`https://${nft.imageLowResIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
                     />
