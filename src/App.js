@@ -29,7 +29,12 @@ const customTheme = createTheme({
       fontWeight: "300",
       fontStyle: "italic",
       color: "#3D57A7"
-    }
+    },
+    h6: {
+      fontWeight: "300",      
+      color: "#3D57A7"
+    },
+
   },
   palette: {
     primary: {

@@ -2,9 +2,13 @@ import React, {useEffect, useState} from "react";
 
 import Grid from "@mui/material/Grid";
 import Typography from '@mui/material/Typography';
+import { Divider } from "@mui/material";
 
 import NFTCard from "./components/NFTCard";
 import WalletService from "./services/wallet-service"
+import {ReactComponent as Infographic} from "./svgs/Asset1.svg"
+import {ReactComponent as Infographic2} from "./svgs/Asset2.svg"
+import {ReactComponent as Infographic3} from "./svgs/Asset3.svg"
 
 
 const axios = require('axios').default;
@@ -55,7 +59,7 @@ export default function Dashboard(){
         </Typography>
       </Grid>
     </Grid>
-    <Grid container spacing={4} columns={10}>
+    <Grid container spacing={4} columns={10}  style={{paddingTop: "5rem"}}>
     {nftTypes.map(nftType => (
       <Grid item xs={12} sm={6} lg={3} xl={2} key={nftType.id}>
         <NFTCard
@@ -81,7 +85,7 @@ export default function Dashboard(){
                     </Typography>
                 </Grid>
             </Grid>
-            <Grid container spacing={2} columns={10} style={{paddingTop: "2rem"}}>
+            <Grid container spacing={2} columns={10} style={{paddingTop: "5rem"}}>
             {ownedNfts.map(nft => (
             <Grid item xs={12} sm={5} lg={3} xl={2} key={nft.contractId}>
                 <NFTCard
@@ -96,8 +100,51 @@ export default function Dashboard(){
   )
 
   return (
-    <div>
+    <div style={{paddingTop: "2rem"}}>
       {ownedNfts.length? showOwnedNftsView :selectNFTView}
+      <Divider style={{paddingTop: "5rem", borderColor: "#3D57A7"}}></Divider>
+      <Typography variant="h4" component="div" style={{paddingTop: "5rem"}}>
+        How it works
+      </Typography>
+      <Grid container spacing={4}   justifyContent="center" style={{paddingTop: "2rem"}}>
+        <Grid item xs={12} sm={12} lg={3} xl={3}>
+          <Infographic style={{height: "18vh"}}></Infographic>
+        </Grid>
+        <Grid item xs={12} sm={12} lg={3} xl={3}>
+          <Typography variant="h6" component="div">
+            Choose your desired character! <br/>
+            There are 5 different RUMIA tokens based on her music videos.
+          </Typography> <br/>
+          <Typography variant="h6" component="div">
+            Each one will unlock different custom content
+            </Typography>
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={4}   justifyContent="center" style={{paddingTop: "2rem"}}>
+       <Grid item xs={12} sm={12} lg={3} xl={3}>
+          <Typography variant="h6" component="div">
+            Then, pick your favorite colour. <br/>
+            This is what makes your NFT unique, <br/>
+            one of a kind
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sm={12} lg={3} xl={3}>
+          <Infographic2 style={{height: "15vh"}}></Infographic2>
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={4}   justifyContent="center" style={{paddingTop: "2rem"}}>
+        <Grid item xs={12} sm={12} lg={3} xl={3}>
+          <Infographic3 style={{height: "15vh"}}></Infographic3>
+        </Grid>
+        <Grid item xs={12} sm={12} lg={3} xl={3}>
+          <Typography variant="h6" component="div">
+            Once you made your selection and went through the process of activating your Token, you can unlock your exclusive content.
+          </Typography>
+        </Grid>
+      </Grid>
+      
     </div>
   )
 }
