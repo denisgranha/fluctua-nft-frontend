@@ -72,7 +72,7 @@ export default function Dashboard(){
           </Typography>
         </Grid>
       </Grid>
-      <Grid container spacing={4} columns={10}  style={{paddingTop: "5rem"}}>
+      <Grid container spacing={4} columns={10}  style={{paddingTop: "5rem"}} justifyContent="center">
         {nftTypes.map(nftType => (
           <Grid item xs={12} sm={6} lg={3} xl={2} key={nftType.id}>
             <NFTCard

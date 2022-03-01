@@ -50,7 +50,7 @@ export default function NFTList(){
                     </Typography>
                 </Grid>
             </Grid>
-            <Grid container spacing={2} columns={10} style={{paddingTop: "2rem"}}>
+            <Grid container spacing={2} columns={10} style={{paddingTop: "2rem"}} justifyContent="center">
             {nfts.map(nft => (
             <Grid item xs={12} sm={5} lg={3} xl={2} key={nft.contractId}>
                 {nft.isClaimed?claimedCard(nft):regularCard(nft)}
