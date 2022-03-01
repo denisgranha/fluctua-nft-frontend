@@ -8,6 +8,7 @@ import Button from "@mui/material/Button"
 import Typography from '@mui/material/Typography';
 import {NFTCardWithoutLink} from "./components/NFTCard";
 import WalletService from "./services/wallet-service"
+import YoutubeEmbed from './components/YoutubeEmbed';
 
 const axios = require('axios').default;
 const backendURL = process.env.REACT_APP_BACKEND_URL
@@ -16,6 +17,7 @@ const backendURL = process.env.REACT_APP_BACKEND_URL
 export default function NFTReveal(){
     let { nftId } = useParams();
     const [nft, setNft] = useState([])
+    const [nftContent, setNftContent] = useState([])
 
     useEffect(() => {
         axios.get(`${backendURL}/nfts/?contract_id=${nftId}`)
@@ -27,7 +29,58 @@ export default function NFTReveal(){
 
     async function revealContent(){
         const signature = await WalletService.signNftContent({nft: nftId})
-        console.log(signature)
+        const {userEmail, coinbase} = WalletService.isLoggedIn()
+        const payloadData = {
+            email: userEmail,
+            proof: signature,
+            nft: parseInt(nftId),
+            ethereumAddress: coinbase
+        }
+        axios.post(`${backendURL}/nfts/content/`, payloadData)
+        .then(response => {
+            console.log(response.data)
+            setNftContent(response.data)
+            
+        })
+    }
+    
+    function showNftContent(){
+        if (nftContent.length){
+            const renderedContent = nftContent.map(nftContentItem => {
+                if (nftContentItem.contentType === "youtube"){
+                    return (
+                        <Grid item xs={12} lg={12} md={12} key={nftContentItem.contentUrl}>
+                            <YoutubeEmbed embedURL={nftContentItem.contentUrl} />
+                        </Grid>
+                    )
+                }
+                else{
+                    return (
+                        <Grid item xs={12} lg={12} md={12}>
+                            Content Type Unknown
+                        </Grid>
+                    )
+                }
+
+            })
+            return (
+                <div>
+                    <Grid 
+                    container
+                    justifyContent="center"
+                    alignItems="center">
+                    {renderedContent}
+                    </Grid>
+                </div>
+            )
+        }
+        else{
+            return (
+                <Button variant="contained" onClick={revealContent}>
+                    Reveal Exclusive Content
+                </Button>
+            )
+        }
     }
 
     return (
@@ -50,9 +103,7 @@ export default function NFTReveal(){
                         {nft.description}
                     </div>
                     <div>
-                    <Button variant="contained" onClick={revealContent}>
-                        Reveal Exclusive Content
-                    </Button>
+                    {showNftContent()}
                     </div>
         </div>
     )

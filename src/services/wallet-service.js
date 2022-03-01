@@ -145,13 +145,13 @@ const signNftContent = async ({nft}) => {
   const types = {
       NftContent: [
           { name: 'email', type: 'string' },
-          { name: 'nft', type: 'int' }
+          { name: 'nft', type: 'int256' }
       ]
   };
 
   const values = {
       email: userEmail,
-      nft
+      nft: parseInt(nft)
   }
 
   const signer = provider.getSigner()
