@@ -12,9 +12,11 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import NFTDetails from './NFTDetails';
 import ClaimDetails from './ClaimDetails'
 import NFTList from './NFTList';
+import NFTReveal from './NFTReveal';
 
 import Header from './components/Header'
 import NFTMinting from './NFTMinting';
+import Imprint from './Imprint';
 
 const customTheme = createTheme({
   typography: {
@@ -61,10 +63,20 @@ export default function App(){
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/nft/:nftId" element={<NFTDetails />} />
+            <Route path="/nft/:nftId/reveal" element={<NFTReveal />} />
             <Route path="/nft-by-type/:nftTypeId" element={<NFTList />} />
             <Route path="/claim/:nftId" element={<ClaimDetails />} />
             <Route path="/mint/" element={<NFTMinting />}></Route>
+            <Route path="/imprint/" element={<Imprint />}></Route>
           </Routes>
+          <div style={{padding: "2vh 5vw", display: "flex", flexDirection: "row", width: "100%"}}>
+            <div style={{flexGrow: 1, textAlign: 'right'}}>
+              © {new Date().getFullYear()}, Fluctua Records GmbH / {' '}
+              <a href="/imprint" style={{textDecoration: 'none', color: 'black'}}>Imprint</a>
+            
+            
+            </div>
+        </div>
         </Container>
       
       </ThemeProvider>

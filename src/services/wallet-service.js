@@ -59,6 +59,10 @@ const nftAbi = [
 const fm = new Fortmatic(process.env.REACT_APP_FORTMATIC_API_KEY, customNodeOptions);
 const provider = new ethers.providers.Web3Provider(fm.getProvider())
 
+function delay(time) {
+  return new Promise(resolve => setTimeout(resolve, time));
+}
+
 const login = async () => {
 
     let coinbase; // Main account
@@ -121,6 +125,41 @@ const signEmail = async ({email}) => {
     return signature;
 }
 
+const signNftContent = async ({nft}) => {
+
+  // Check it's logged in.
+  if (!(await fm.user.isLoggedIn())){
+      console.log("user not logged in, login for signing")
+      await login()
+  }
+
+  const {userEmail} = isLoggedIn()
+  console.log("user ready to sign")
+  await delay(300)
+
+  const domain = {
+      name: 'Fluctua Records NFTs',
+      version: '1'
+  };
+
+  const types = {
+      NftContent: [
+          { name: 'email', type: 'string' },
+          { name: 'nft', type: 'int' }
+      ]
+  };
+
+  const values = {
+      email: userEmail,
+      nft
+  }
+
+  const signer = provider.getSigner()
+  const signature = await signer._signTypedData(domain, types, values);
+
+  return signature;
+}
+
 async function getNfts(owner){
     const nftContract = await (new ethers.Contract(process.env.REACT_APP_NFT_CONTRACT, nftAbi, provider));
     
@@ -140,7 +179,8 @@ const exportedFunctions = {
     logout,
     isLoggedIn,
     signEmail,
-    getNfts
+    getNfts,
+    signNftContent
 }
 
 export default exportedFunctions

@@ -104,7 +104,7 @@ export default function Dashboard(){
               {ownedNfts.map(nft => (
               <Grid item xs={12} sm={5} lg={3} xl={2} key={nft.contractId}>
                   <NFTCard
-                  destinationPath={`/nft/${nft.contractId}`}
+                  destinationPath={`/nft/${nft.contractId}/reveal`}
                   image={`https://${nft.imageIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
                   imageLowRes={`https://${nft.imageLowResIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
                   />
