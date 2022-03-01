@@ -11,9 +11,9 @@ export default function Header(){
   const [coinbase, setCoinbase] = useState()
 
   async function loginFortmatic(){
-    const {coinbase, userEmail} = await WalletService.login();
+    const {coinbase} = await WalletService.login();
     setCoinbase(coinbase)
-    console.log(coinbase, userEmail)
+    console.log(coinbase)
     
   }
   

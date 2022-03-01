@@ -32,12 +32,12 @@ export default function Dashboard(){
 
     async function checkBalance(){
       // Check if user holds any nft, by looking at the contract
-      const {coinbase, userEmail} = WalletService.isLoggedIn()
+      const {coinbase} = WalletService.isLoggedIn()
 
-      if(userEmail){
+      if(coinbase){
         // If user has any token claim, it might have the token, so we warn the user to hold on, as it takes a few seconds
         // Blockchain is slow
-        axios.get(`${backendURL}/nfts/claims/?user__email=${userEmail}`)
+        axios.get(`${backendURL}/nfts/claims/?user__ethereum_address=${coinbase}`)
         .then(response => {
           setUserClaims(response.data.results)
         })

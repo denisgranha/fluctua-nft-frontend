@@ -29,8 +29,8 @@ export default function NFTMinting(){
     useEffect(() => {
 
         function claimNFT(proof){
-            const {coinbase, userEmail} = WalletService.isLoggedIn()
-            axios.post(`${backendURL}/nfts/spotify-pre-saves/`, {email: userEmail, ethereumAddress: coinbase, proof, spotifyToken, nft})
+            const {coinbase} = WalletService.isLoggedIn()
+            axios.post(`${backendURL}/nfts/spotify-pre-saves/`, {ethereumAddress: coinbase, proof, spotifyToken, nft})
             .then(() => {
                 setProgress(20)
                 // from now on, monitor claim tx, and adapt progress accordingly
@@ -45,8 +45,8 @@ export default function NFTMinting(){
         }
     
         function checkClaimStatus(){
-            const {userEmail} = WalletService.isLoggedIn()
-            axios.get(`${backendURL}/nfts/claims/?user__email=${userEmail}`)
+            const {coinbase} = WalletService.isLoggedIn()
+            axios.get(`${backendURL}/nfts/claims/?user__ethereum_address=${coinbase}`)
             .then((response) => {
                 const nftClaim = response.data.results[0]
                 console.log(nftClaim)
@@ -71,15 +71,12 @@ export default function NFTMinting(){
             })
         }
         async function initMinting(){
-            // Get NFT id through query param state
-
-            // Get email and login
-            const {userEmail} = await WalletService.login()
+            // Get NFT id through query param state            
 
             // Set some sleep between functions, formatic is a bit buggy
             setTimeout(async () => {
                 // Sign message
-                const _signature = await WalletService.signEmail({email: userEmail})
+                const _signature = await WalletService.signPreSave()
 
                 setProgress(10)
                 setLoadingSigning(false)

@@ -30,9 +30,8 @@ export default function NFTReveal(){
 
     async function revealContent(){
         const signature = await WalletService.signNftContent({nft: nftId})
-        const {userEmail, coinbase} = WalletService.isLoggedIn()
+        const {coinbase} = WalletService.isLoggedIn()
         const payloadData = {
-            email: userEmail,
             proof: signature,
             nft: parseInt(nftId),
             ethereumAddress: coinbase

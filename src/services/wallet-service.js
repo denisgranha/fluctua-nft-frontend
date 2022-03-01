@@ -66,18 +66,31 @@ function delay(time) {
 const login = async () => {
 
     let coinbase; // Main account
-    let userEmail;
-    const accounts = await provider.provider.enable();
-    coinbase = accounts[0]
 
-    let userData = await fm.user.getUser();
-    userEmail = userData.email;
+    // if (typeof window.ethereum !== 'undefined') {
+    //   console.log('MetaMask is installed!');
+    //   // Ask which wallet to use
+    //   try{
+    //     coinbase = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    //   }
+    //   catch(e){
+    //     console.log(e)
+    //   }
+    // }
+
+    // Check it's logged in.
+    if (!(await fm.user.isLoggedIn())){
+      console.log("user not logged in")
+      
+    }
+
+    const accounts = await provider.provider.enable();
+    coinbase = accounts[0]    
 
     // Save in localstorage
     localStorage.setItem("coinbase", coinbase)
-    localStorage.setItem("userEmail", userData.email)
 
-    return {coinbase, userEmail};
+    return {coinbase};
 }
 
 const logout = async () => {
@@ -94,14 +107,9 @@ const isLoggedIn = () => {
     }
 }
 
-const signEmail = async ({email}) => {
-
+const signPreSave = async () => {
     
-    // Check it's logged in.
-    if (!(await fm.user.isLoggedIn())){
-        console.log("user not logged in, login for signing")
-        await login()
-    }
+    const {coinbase} = await login()
     console.log("user ready to sign")
 
     const domain = {
@@ -111,12 +119,12 @@ const signEmail = async ({email}) => {
 
     const types = {
         Person: [
-            { name: 'email', type: 'string' }
+            { name: 'wallet', type: 'string' }
         ]
     };
 
     const values = {
-        email
+        wallet: coinbase
     }
 
     const signer = provider.getSigner()
@@ -133,9 +141,9 @@ const signNftContent = async ({nft}) => {
       await login()
   }
 
-  const {userEmail} = isLoggedIn()
+  const {coinbase} = isLoggedIn()
   console.log("user ready to sign")
-  await delay(300)
+  await delay(800)
 
   const domain = {
       name: 'Fluctua Records NFTs',
@@ -144,13 +152,13 @@ const signNftContent = async ({nft}) => {
 
   const types = {
       NftContent: [
-          { name: 'email', type: 'string' },
+          { name: 'wallet', type: 'string' },
           { name: 'nft', type: 'int256' }
       ]
   };
 
   const values = {
-      email: userEmail,
+      wallet: coinbase,
       nft: parseInt(nft)
   }
 
@@ -178,7 +186,7 @@ const exportedFunctions = {
     login,
     logout,
     isLoggedIn,
-    signEmail,
+    signPreSave,
     getNfts,
     signNftContent
 }

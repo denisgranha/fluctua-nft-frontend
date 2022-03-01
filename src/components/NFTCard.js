@@ -3,6 +3,7 @@ import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 
+
 const CardActionAreaActionArea = styled(CardActionArea)(() => ({
     borderRadius: 0,
   }));
@@ -38,14 +39,13 @@ const CardActionAreaActionArea = styled(CardActionArea)(() => ({
     imageLowRes,
     destinationPath
   }) => {
-    const history = useNavigate();
-    
+    const history = useNavigate();    
     return (
     <CardActionAreaActionArea onClick={() => {
       history(destinationPath)
     }}>
       <StyledCard >
-        <Img src={image} alt={title} />
+        <Img src={image} alt={title} />        
       </StyledCard>
     </CardActionAreaActionArea>
   )};
