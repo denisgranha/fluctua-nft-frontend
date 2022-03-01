@@ -121,7 +121,7 @@ export default function Dashboard(){
         <Typography variant="h4" component="div">
         we noticed that you might have a NFT, wait a few seconds while we check it in the Blockchain
         </Typography>
-        <CircularProgress></CircularProgress>
+        <CircularProgress style={{marginTop: "5rem"}}></CircularProgress>
         </div>
     )
   }
