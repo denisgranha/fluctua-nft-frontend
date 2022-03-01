@@ -169,7 +169,7 @@ export default function Dashboard(){
         </Grid>
         <Grid item xs={12} sm={12} lg={3} xl={3}>
           <Typography variant="h6" component="div">
-            Once you made your selection and went through the process of activating your Token, you can unlock your exclusive content.
+            Once you made your selection and went through the process of activating your Token, you can unlock your Patreon-like exclusive content.
           </Typography>
         </Grid>
       </Grid>

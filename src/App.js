@@ -17,6 +17,7 @@ import NFTReveal from './NFTReveal';
 import Header from './components/Header'
 import NFTMinting from './NFTMinting';
 import Imprint from './Imprint';
+import Footer from './components/Footer';
 
 const customTheme = createTheme({
   typography: {
@@ -36,6 +37,10 @@ const customTheme = createTheme({
       fontWeight: "300",      
       color: "#3D57A7"
     },
+    body1:{
+      color: "#3D57A7"
+    },
+    color: "#3D57A7"
 
   },
   palette: {
@@ -58,7 +63,7 @@ export default function App(){
             body: { backgroundColor: "#F6EEEA" },
           }}
         />
-        <Container maxWidth="xl" style={{paddingTop: "2rem"}}>
+        <Container maxWidth="xl" style={{paddingTop: "2rem", minHeight: "100%"}}>
         <Header></Header>
           <Routes>
             <Route path="/" element={<Dashboard />} />
@@ -69,14 +74,7 @@ export default function App(){
             <Route path="/mint/" element={<NFTMinting />}></Route>
             <Route path="/imprint/" element={<Imprint />}></Route>
           </Routes>
-          <div style={{padding: "2vh 5vw", display: "flex", flexDirection: "row", width: "100%"}}>
-            <div style={{flexGrow: 1, textAlign: 'right'}}>
-              © {new Date().getFullYear()}, Fluctua Records GmbH / {' '}
-              <a href="/imprint" style={{textDecoration: 'none', color: 'black'}}>Imprint</a>
-            
-            
-            </div>
-        </div>
+          <Footer></Footer>
         </Container>
       
       </ThemeProvider>

@@ -42,7 +42,7 @@ export default function NFTList(){
     }
     
     return (
-        <div>
+        <div style={{paddingTop: "2rem"}}>
             <Grid container spacing={4} columns={12}>
                 <Grid item xs={12} sm={12} xl={11} lg={11}>
                     <Typography variant="h4" component="div">

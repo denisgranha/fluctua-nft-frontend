@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography';
 import {NFTCardWithoutLink} from "./components/NFTCard";
 import WalletService from "./services/wallet-service"
 import YoutubeEmbed from './components/YoutubeEmbed';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 const axios = require('axios').default;
 const backendURL = process.env.REACT_APP_BACKEND_URL
@@ -77,7 +78,7 @@ export default function NFTReveal(){
         else{
             return (
                 <Button variant="contained" onClick={revealContent}>
-                    Reveal Exclusive Content
+                    Reveal Your Content
                 </Button>
             )
         }
@@ -85,10 +86,11 @@ export default function NFTReveal(){
 
     return (
         <div>
-            <Typography variant="h4" component="div">
+            <Typography variant="h4" component="div" style={{paddingTop: "2rem"}}>
             {nft.name}
             </Typography>
             <Grid 
+            style={{paddingTop: "2rem"}}
             container
             justifyContent="center"
             alignItems="center">
@@ -99,12 +101,10 @@ export default function NFTReveal(){
                     />
                 </Grid>
             </Grid>
-            <div>
-                        {nft.description}
-                    </div>
-                    <div>
-                    {showNftContent()}
-                    </div>
+            <ArrowDownwardIcon sx={{ fontSize: 80 }} style={{paddingTop: "2rem"}}></ArrowDownwardIcon>
+            <div style={{paddingTop: "2rem"}}>
+                {showNftContent()}
+            </div>
         </div>
     )
 

@@ -39,21 +39,21 @@ export default function ClaimDetails(){
                 <Grid item xs={12} sm={12} lg={3} xl={3}>
                     {/* <Infographic4 style={{height: "30vh"}}></Infographic4> */}
                     <NFTCardWithoutLink image="/img/NFTwebsite-05.png"></NFTCardWithoutLink>
-                    <Typography variant="h6" component="div">
+                    <Typography variant="h6" component="div" style={{paddingTop: "2rem"}}>
                         first, you would need to log into your Spotify account and allow us access to pre-save RUMIAs new single
                     </Typography>
                 </Grid>   
                 <Grid item xs={12} sm={12} lg={3} xl={3}>
                     {/* <Infographic5 style={{height: "30vh"}}></Infographic5> */}
                     <NFTCardWithoutLink image="/img/NFTwebsite-06.png"></NFTCardWithoutLink>
-                    <Typography variant="h6" component="div">
+                    <Typography variant="h6" component="div" style={{paddingTop: "2rem"}}>
                         then, you can sign up to Fortmatic to set up your digital wallet.
                     </Typography>
                 </Grid>   
                 <Grid item xs={12} sm={12} lg={3} xl={3}>
                     {/* <Infographic6 style={{height: "30vh"}}></Infographic6> */}
                     <NFTCardWithoutLink image="/img/NFTwebsite-07.png"></NFTCardWithoutLink>
-                    <Typography variant="h6" component="div">
+                    <Typography variant="h6" component="div" style={{paddingTop: "2rem"}}>
                         after these steps are completed, we will generate your NFT! <br/>
                         you can now unlock your exclusive content!
                     </Typography>

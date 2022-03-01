@@ -27,11 +27,12 @@ export default function NFTDetails(){
     }, [nftId])
 
     return (
-        <div>
+        <div style={{paddingTop: "2rem"}}>
             <Typography variant="h4" component="div">
             {nft.name}
             </Typography>
-            <Grid 
+            <Grid
+            style={{paddingTop: "2rem"}} 
             container
             justifyContent="center"
             alignItems="center">
@@ -42,14 +43,14 @@ export default function NFTDetails(){
                     />
                 </Grid>
             </Grid>
-            <div>
-                        {nft.description}
-                    </div>
-                    <div>
-                    <Button variant="contained" onClick={() => {history(`/claim/${nft.contractId}`)}}>
-                        CLAIM
-                    </Button>
-                    </div>
+            <div style={{paddingTop: "2rem"}}>
+                {nft.description}
+            </div>
+            <div style={{paddingTop: "2rem"}}>
+            <Button variant="contained" onClick={() => {history(`/claim/${nft.contractId}`)}} >
+                CLAIM
+            </Button>
+            </div>
         </div>
     )
 

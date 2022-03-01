@@ -100,7 +100,26 @@ export default function NFTMinting(){
             <Typography variant="h4" component="div">
                 NFT Minting in progress, hold on
             </Typography>
-            <LinearProgressWithLabel value={progress} />
+            <LinearProgressWithLabel value={progress} />            
+        </div>
+    )
+
+    const loadingSigningInfoHeader = (
+        <div>
+            <Typography variant="h4" component="div">
+            Blockchain Wallet being Initiated. Please wait a few seconds and follow login indications.
+            </Typography>
+        </div>
+    )
+
+    const loadingSigningInfoFooter = (
+        <CircularProgress style={{textAlign: "center"}} />
+    )
+
+    return (
+        <div>
+            {loadingSigning?loadingSigningInfoHeader:''}
+            {showAnimation?nftCard:''}
             <Grid 
             container
             justifyContent="center"
@@ -109,23 +128,7 @@ export default function NFTMinting(){
                     <NFTCardWithoutLink image="/img/NFT_animation.gif"/>
                 </Grid>
             </Grid>
-        </div>
-    )
-
-    const loadingSigningInfo = (
-        <div>
-            <Typography variant="h4" component="div">
-            Blockchain Wallet being Initiated. Please wait a few seconds and follow login indications.
-            </Typography>
-            
-            <CircularProgress style={{textAlign: "center"}} />
-        </div>
-    )
-
-    return (
-        <div>
-            {loadingSigning?loadingSigningInfo:''}
-            {showAnimation?nftCard:''}
+            {loadingSigning?loadingSigningInfoFooter:''}
         </div>
     )
 
