@@ -6,9 +6,7 @@ import {
 import Grid from "@mui/material/Grid";
 import Typography from '@mui/material/Typography';
 import {NFTCardWithoutLink, NFTCard} from "./components/NFTCard";
-
-const axios = require('axios').default;
-const backendURL = process.env.REACT_APP_BACKEND_URL
+import BackendService from "./services/backend-service"
 
 export default function NFTList(){
 
@@ -16,10 +14,9 @@ export default function NFTList(){
     const [nfts, setNfts] = useState([])
 
     useEffect(() => {
-        axios.get(`${backendURL}/nfts/?nft_type=${nftTypeId}`)
-        .then(response => {
-            console.log(response.data.results)
-            setNfts(response.data.results)
+        BackendService.getNftsByType(nftTypeId)
+        .then(_nfts => {
+            setNfts(_nfts)
         })
     }, [nftTypeId])
 

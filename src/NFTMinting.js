@@ -5,14 +5,12 @@ import {
 } from "react-router-dom";
 
 import WalletService from './services/wallet-service'
+import BackendService from "./services/backend-service"
 import {NFTCardWithoutLink} from "./components/NFTCard";
 import Grid from "@mui/material/Grid";
 import LinearProgressWithLabel from "./components/LinearProgressWithLabel"
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
-
-const axios = require('axios').default;
-const backendURL = process.env.REACT_APP_BACKEND_URL
 
 
 export default function NFTMinting(){
@@ -30,7 +28,7 @@ export default function NFTMinting(){
 
         function claimNFT(proof){
             const {coinbase} = WalletService.isLoggedIn()
-            axios.post(`${backendURL}/nfts/spotify-pre-saves/`, {ethereumAddress: coinbase, proof, spotifyToken, nft})
+            BackendService.performPreSave({ethereumAddress: coinbase, proof, spotifyToken, nft})
             .then(() => {
                 setProgress(20)
                 // from now on, monitor claim tx, and adapt progress accordingly
@@ -46,11 +44,9 @@ export default function NFTMinting(){
     
         function checkClaimStatus(){
             const {coinbase} = WalletService.isLoggedIn()
-            axios.get(`${backendURL}/nfts/claims/?user__ethereum_address=${coinbase}`)
-            .then((response) => {
-                const nftClaim = response.data.results[0]
-                console.log(nftClaim)
-    
+            BackendService.getDeploymentUserClaim(coinbase, nft)
+            .then((nftClaim) => {
+
                 if(nftClaim.txMined){
                     setProgress(100)
 

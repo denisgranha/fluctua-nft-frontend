@@ -8,11 +8,9 @@ import Button from "@mui/material/Button"
 import Typography from '@mui/material/Typography';
 import {NFTCardWithoutLink} from "./components/NFTCard";
 import WalletService from "./services/wallet-service"
+import BackendService from "./services/backend-service"
 import YoutubeEmbed from './components/YoutubeEmbed';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-
-const axios = require('axios').default;
-const backendURL = process.env.REACT_APP_BACKEND_URL
 
 
 export default function NFTReveal(){
@@ -21,10 +19,9 @@ export default function NFTReveal(){
     const [nftContent, setNftContent] = useState([])
 
     useEffect(() => {
-        axios.get(`${backendURL}/nfts/?contract_id=${nftId}`)
-        .then(response => {
-            console.log(response.data.results)
-            setNft(response.data.results[0])
+        BackendService.getNftsByContractIds([nftId])
+        .then(_nfts => {
+            setNft(_nfts[0])
         })
     }, [nftId])
 
@@ -36,10 +33,9 @@ export default function NFTReveal(){
             nft: parseInt(nftId),
             ethereumAddress: coinbase
         }
-        axios.post(`${backendURL}/nfts/content/`, payloadData)
-        .then(response => {
-            console.log(response.data)
-            setNftContent(response.data)
+        BackendService.revealContent(payloadData)
+        .then(_content => {
+            setNftContent(_content)
             
         })
     }

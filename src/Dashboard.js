@@ -7,13 +7,10 @@ import { CircularProgress } from "@mui/material";
 
 import NFTCard from "./components/NFTCard";
 import WalletService from "./services/wallet-service"
+import BackendService from "./services/backend-service"
 import {ReactComponent as Infographic} from "./svgs/Asset1.svg"
 import {ReactComponent as Infographic2} from "./svgs/Asset2.svg"
 import {ReactComponent as Infographic3} from "./svgs/Asset3.svg"
-
-
-const axios = require('axios').default;
-const backendURL = process.env.REACT_APP_BACKEND_URL
 
 export default function Dashboard(){
 
@@ -25,9 +22,8 @@ export default function Dashboard(){
   let potentialNftsFound, showOwnedNftsView, selectNFTView
 
   useEffect(() => {
-    axios.get(`${backendURL}/nfts/types/`)
-    .then(response => {
-      setNftTypes(response.data.results)
+    BackendService.getNftTypes().then(_nftTypes => {
+      setNftTypes(_nftTypes)
     })
 
     async function checkBalance(){
@@ -37,9 +33,9 @@ export default function Dashboard(){
       if(coinbase){
         // If user has any token claim, it might have the token, so we warn the user to hold on, as it takes a few seconds
         // Blockchain is slow
-        axios.get(`${backendURL}/nfts/claims/?user__ethereum_address=${coinbase}`)
-        .then(response => {
-          setUserClaims(response.data.results)
+        BackendService.getUserClaims(coinbase)
+        .then(_claims => {
+          setUserClaims(_claims)
         })
       }
 
@@ -55,9 +51,9 @@ export default function Dashboard(){
   useEffect(()=> {
     if (ownedNftIds.length){
       // Get NFT metadata for owned nfts
-      axios.get(`${backendURL}/nfts/?contract_id__in=${ownedNftIds.join(",")}`)
-      .then(response => {
-        setOwnedNfts(response.data.results)
+      BackendService.getNftsByContractIds(ownedNftIds)
+      .then(_nfts => {
+        setOwnedNfts(_nfts)
       })
     }
   }, [ownedNftIds])

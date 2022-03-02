@@ -111,6 +111,7 @@ const signPreSave = async () => {
     
     const {coinbase} = await login()
     console.log("user ready to sign")
+    await delay(800)
 
     const domain = {
         name: 'Fluctua Records NFTs',
