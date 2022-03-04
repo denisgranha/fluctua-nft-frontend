@@ -12,12 +12,19 @@ export default function ProgressiveImage(props){
     const [blur, setBlur] = useState(props.initialBlur?props.initialBlur:defaultProps.initialBlur)
 
     useEffect(() => {
+
+        const abortController = new AbortController()   // creating an AbortController
+
     
         fetch(props.src)
         .then(srcDataURI => {
             setSrc(srcDataURI)
             setBlur(0)
         });
+
+        return () => {
+            abortController.abort()                       // stop the query by aborting on the AbortController on unmount
+        }
     
     })
 
