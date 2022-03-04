@@ -5,7 +5,7 @@ import {
 
 import Grid from "@mui/material/Grid";
 import Typography from '@mui/material/Typography';
-import {NFTCardWithoutLink, NFTCard} from "./components/NFTCard";
+import {NFTCardWithoutLinkDisabled, NFTCard} from "./components/NFTCard";
 import BackendService from "./services/backend-service"
 import {formatIPFS} from "./utils"
 
@@ -23,7 +23,7 @@ export default function NFTList(){
 
     function claimedCard(nft){
         return (
-            <NFTCardWithoutLink
+            <NFTCardWithoutLinkDisabled
             image={formatIPFS(nft.imageIpfsUri)}
             disable={true}
             imageLowRes={formatIPFS(nft.imageLowResIpfsUri)}

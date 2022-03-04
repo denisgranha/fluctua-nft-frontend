@@ -9,9 +9,7 @@ import Button from "@mui/material/Button"
 import Typography from '@mui/material/Typography';
 import {NFTCardWithoutLink} from "./components/NFTCard";
 import {formatIPFS} from "./utils"
-
-const axios = require('axios').default;
-const backendURL = process.env.REACT_APP_BACKEND_URL
+import BackendService from "./services/backend-service"
 
 
 export default function NFTDetails(){
@@ -20,10 +18,9 @@ export default function NFTDetails(){
     const [nft, setNft] = useState([])
 
     useEffect(() => {
-        axios.get(`${backendURL}/nfts/?contract_id=${nftId}`)
-        .then(response => {
-            console.log(response.data.results)
-            setNft(response.data.results[0])
+        BackendService.getNftsByContractIds([nftId])
+        .then(_nfts => {
+            setNft(_nfts[0])
         })
     }, [nftId])
 
@@ -38,10 +35,10 @@ export default function NFTDetails(){
             justifyContent="center"
             alignItems="center">
                 <Grid item xs={12} lg={4} md={6}>
-                    <NFTCardWithoutLink
+                    {nft?<NFTCardWithoutLink
                     image={formatIPFS(nft.imageIpfsUri)}
                     imageLowRes={formatIPFS(nft.imageLowResIpfsUri)}
-                    />
+                    />:nft.toString()}
                 </Grid>
             </Grid>
             <div style={{paddingTop: "2rem"}}>

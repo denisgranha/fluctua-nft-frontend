@@ -26,6 +26,14 @@ const CardActionAreaActionArea = styled(CardActionArea)(() => ({
     background: "#F6EEEA",
   }));
 
+  const StyledCardNoLinkDisabled = styled(Card)(() => ({
+    minWidth: 256,
+    borderRadius: 0,
+    boxShadow: "none",
+    background: "#F6EEEA",
+    filter: "brightness(50%)"
+  }));
+
   // const Img = styled('img')({
   //   margin: 'auto',
   //   display: 'block',
@@ -64,8 +72,7 @@ const CardActionAreaActionArea = styled(CardActionArea)(() => ({
   const NFTCardWithoutLink = ({
     image,
     title,
-    imageLowRes,
-    disable
+    imageLowRes
   }) => {
     
     return (
@@ -84,9 +91,32 @@ const CardActionAreaActionArea = styled(CardActionArea)(() => ({
       </StyledCardNoLink>
   )};
 
+  const NFTCardWithoutLinkDisabled = ({
+    image,
+    title,
+    imageLowRes
+  }) => {
+    
+    return (
+      <StyledCardNoLinkDisabled>
+        {/* <Img src={image} alt={title} sx={disable?{filter: "brightness(50%);"}:{}}/> */}
+        <ProgressiveImage
+          preview={imageLowRes}
+          src={image}
+          render={(src, style) => <img src={src} alt={title} style={Object.assign(style, { 
+            margin: 'auto',
+            display: 'block',
+            width: '100%',
+            height: '100%'
+          })}/>}
+        />
+      </StyledCardNoLinkDisabled>
+  )};
+
   export default NFTCard;
 
   export {
     NFTCardWithoutLink,
+    NFTCardWithoutLinkDisabled,
     NFTCard
   }
