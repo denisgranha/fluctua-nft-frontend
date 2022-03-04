@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Button from "@mui/material/Button"
 import { Divider } from "@mui/material";
 import { Grid } from "@mui/material";
@@ -24,6 +25,12 @@ export default function ClaimDetails(){
     let { nftId } = useParams();
     paramsObj.state = nftId;
     let searchParams = new URLSearchParams(paramsObj);
+
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [])
+
+    
     return (
         <div style={{paddingTop: "3rem"}}>
             <Button variant="contained" style={{width: "60vw"}} onClick={() => {
