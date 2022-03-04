@@ -13,7 +13,7 @@ export default function ProgressiveImage(props){
 
     useEffect(() => {
 
-        const abortController = new AbortController()   // creating an AbortController
+        const abortController = new AbortController()  // creating an AbortController
 
     
         fetch(props.src)
@@ -23,7 +23,7 @@ export default function ProgressiveImage(props){
         });
 
         return () => {
-            abortController.abort()                       // stop the query by aborting on the AbortController on unmount
+            abortController.abort()  // stop the query by aborting on the AbortController on unmount
         }
     
     })
