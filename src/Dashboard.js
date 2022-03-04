@@ -64,7 +64,7 @@ export default function Dashboard(){
     selectNFTView = (
     <div>
       <Grid container spacing={4} columns={12}>
-        <Grid item xs={12} sm={12} xl={11} lg={11}>
+        <Grid item xs={12} sm={12} xl={12} lg={12}>
           <Typography variant="h4" component="div">
             choose your RUMIA character
           </Typography>
@@ -92,13 +92,13 @@ export default function Dashboard(){
     showOwnedNftsView = (
       <div>
               <Grid container spacing={4} columns={12}>
-                  <Grid item xs={12} sm={12} xl={11} lg={11}>
+                  <Grid item xs={12} sm={12} xl={12} lg={12}>
                       <Typography variant="h4" component="div">
                       your owned RUMIA NFTs
                       </Typography>
                   </Grid>
               </Grid>
-              <Grid container spacing={2} columns={10} style={{paddingTop: "5rem"}}>
+              <Grid container spacing={2} columns={10} style={{paddingTop: "5rem"}} justifyContent="center">
               {ownedNfts.map(nft => (
               <Grid item xs={12} sm={5} lg={3} xl={2} key={nft.contractId}>
                   <NFTCard

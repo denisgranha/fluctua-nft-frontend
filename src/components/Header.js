@@ -31,8 +31,14 @@ export default function Header(){
   return (
   
     <Toolbar >
-    <Grid container spacing={4}>
-      <Grid item xs={12} sm={12} lg={11} xl={11}>
+    <Grid container spacing={4} justifyContent="flex-end">
+    <Grid item xs={12} sm={12} lg={1} xl={1}>
+      {walletAddress?
+        <Button color="inherit" onClick={logoutFortmatic}>Logout</Button>: 
+        <Button color="inherit" onClick={loginFortmatic}>Login</Button>
+      }
+      </Grid>
+      <Grid item xs={12} sm={12} lg={12} xl={12} style={{paddingTop: "0"}}>
         <Button color="inherit" onClick={() => {
             history("/")
           }}>
@@ -40,12 +46,6 @@ export default function Header(){
             Fluctua NFTs
         </Typography>
       </Button>
-      </Grid>
-      <Grid item xs={12} sm={12} lg={1} xl={1}>
-      {walletAddress?
-        <Button color="inherit" onClick={logoutFortmatic}>Logout</Button>: 
-        <Button color="inherit" onClick={loginFortmatic}>Login</Button>
-      }
       </Grid>
     </Grid>    
   </Toolbar> 

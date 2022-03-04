@@ -28,7 +28,8 @@ const customTheme = createTheme({
     ].join(','),
     h2: {
       fontWeight: "600",
-      color: "#3D57A7"
+      color: "#3D57A7",
+      textTransform: "none"
     },
     h4: {
       fontWeight: "300",
