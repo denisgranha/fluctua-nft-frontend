@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
+import ProgressiveImage from "./ProgressiveImage";
 
 
 const CardActionAreaActionArea = styled(CardActionArea)(() => ({
@@ -25,13 +26,13 @@ const CardActionAreaActionArea = styled(CardActionArea)(() => ({
     background: "#F6EEEA",
   }));
 
-  const Img = styled('img')({
-    margin: 'auto',
-    display: 'block',
-    maxWidth: '100%',
-    maxHeight: '100%',
-    background: "#F6EEEA"
-  });
+  // const Img = styled('img')({
+  //   margin: 'auto',
+  //   display: 'block',
+  //   maxWidth: '100%',
+  //   maxHeight: '100%',
+  //   background: "#F6EEEA"
+  // });
   
   const NFTCard = ({
     image,
@@ -45,7 +46,17 @@ const CardActionAreaActionArea = styled(CardActionArea)(() => ({
       history(destinationPath)
     }}>
       <StyledCard >
-        <Img src={image} alt={title} />        
+        {/* <Img src={image} alt={title} />         */}
+        <ProgressiveImage
+          preview={imageLowRes}
+          src={image}
+          render={(src, style) => <img src={src} alt={title} style={Object.assign(style, { 
+            margin: 'auto',
+            display: 'block',
+            width: '100%',
+            height: '100%'
+          })}/>}
+        />
       </StyledCard>
     </CardActionAreaActionArea>
   )};
@@ -59,7 +70,17 @@ const CardActionAreaActionArea = styled(CardActionArea)(() => ({
     
     return (
       <StyledCardNoLink >
-        <Img src={image} alt={title} sx={disable?{filter: "brightness(50%);"}:{}}/>
+        {/* <Img src={image} alt={title} sx={disable?{filter: "brightness(50%);"}:{}}/> */}
+        <ProgressiveImage
+          preview={imageLowRes}
+          src={image}
+          render={(src, style) => <img src={src} alt={title} style={Object.assign(style, { 
+            margin: 'auto',
+            display: 'block',
+            width: '100%',
+            height: '100%'
+          })}/>}
+        />
       </StyledCardNoLink>
   )};
 

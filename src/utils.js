@@ -1,5 +1,5 @@
 function formatIPFS(uri){
-    return process.env.REACT_APP_IPFS_URL + uri
+    return  `https://${uri}.${process.env.REACT_APP_IPFS_URL}`
 }
 
 export {formatIPFS}
