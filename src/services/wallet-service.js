@@ -1,5 +1,7 @@
 import Fortmatic from 'fortmatic';
 import { ethers } from "ethers";
+import store from "../redux/store"
+import { login, logout } from '../redux/walletSlice'
   
 
 // Request user login if needed, returns current user account address
@@ -63,7 +65,7 @@ function delay(time) {
   return new Promise(resolve => setTimeout(resolve, time));
 }
 
-const login = async () => {
+const _login = async () => {
 
     let coinbase; // Main account
 
@@ -87,29 +89,24 @@ const login = async () => {
     const accounts = await provider.provider.enable();
     coinbase = accounts[0]    
 
-    // Save in localstorage
-    localStorage.setItem("coinbase", coinbase)
+    // // Save in localstorage
+    // localStorage.setItem("coinbase", coinbase)
+    store.dispatch(login({
+      walletAddress: coinbase,
+      walletProvider: "fortmatic"
+    }))
 
     return {coinbase};
 }
 
-const logout = async () => {
-    localStorage.removeItem("coinbase")
-    localStorage.removeItem("userEmail")
+const _logout = async () => {
     await fm.user.logout();
+    store.dispatch(logout())
 }
 
-// This is a light check, for a proper login check, you must check through formatic
-const isLoggedIn = () => {
-    return {
-        coinbase: localStorage.getItem("coinbase"),
-        userEmail: localStorage.getItem("userEmail")
-    }
-}
-
-const signPreSave = async () => {
+const _signPreSave = async () => {
     
-    const {coinbase} = await login()
+    const {coinbase} = await _login()
     console.log("user ready to sign")
     await delay(800)
 
@@ -134,15 +131,11 @@ const signPreSave = async () => {
     return signature;
 }
 
-const signNftContent = async ({nft}) => {
+const _signNftContent = async ({nft}) => {
 
   // Check it's logged in.
-  if (!(await fm.user.isLoggedIn())){
-      console.log("user not logged in, login for signing")
-      await login()
-  }
+  const {coinbase} = await _login()
 
-  const {coinbase} = isLoggedIn()
   console.log("user ready to sign")
   await delay(800)
 
@@ -169,7 +162,7 @@ const signNftContent = async ({nft}) => {
   return signature;
 }
 
-async function getNfts(owner){
+async function _getNfts(owner){
     const nftContract = await (new ethers.Contract(process.env.REACT_APP_NFT_CONTRACT, nftAbi, provider));
     
     const nftsCount = await nftContract.balanceOf(owner)
@@ -184,12 +177,11 @@ async function getNfts(owner){
 }
 
 const exportedFunctions = {
-    login,
-    logout,
-    isLoggedIn,
-    signPreSave,
-    getNfts,
-    signNftContent
+    login: _login,
+    logout: _logout,
+    signPreSave: _signPreSave,
+    getNfts: _getNfts,
+    signNftContent: _signNftContent
 }
 
 export default exportedFunctions

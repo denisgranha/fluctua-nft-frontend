@@ -7,6 +7,7 @@ import Grid from "@mui/material/Grid";
 import Typography from '@mui/material/Typography';
 import {NFTCardWithoutLink, NFTCard} from "./components/NFTCard";
 import BackendService from "./services/backend-service"
+import {formatIPFS} from "./utils"
 
 export default function NFTList(){
 
@@ -23,9 +24,9 @@ export default function NFTList(){
     function claimedCard(nft){
         return (
             <NFTCardWithoutLink
-            image={`https://${nft.imageIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
+            image={formatIPFS(nft.imageIpfsUri)}
             disable={true}
-            imageLowRes={`https://${nft.imageLowResIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
+            imageLowRes={formatIPFS(nft.imageLowResIpfsUri)}
         />
         )
     }
@@ -33,8 +34,8 @@ export default function NFTList(){
     function regularCard(nft){
         return (<NFTCard
             destinationPath={`/nft/${nft.contractId}`}
-            image={`https://${nft.imageIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
-            imageLowRes={`https://${nft.imageLowResIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
+            image={formatIPFS(nft.imageIpfsUri)}
+            imageLowRes={formatIPFS(nft.imageLowResIpfsUri)}
         />)
     }
     

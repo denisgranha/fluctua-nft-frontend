@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux'
 import {
     useParams,
 } from "react-router-dom";
@@ -11,12 +12,15 @@ import WalletService from "./services/wallet-service"
 import BackendService from "./services/backend-service"
 import YoutubeEmbed from './components/YoutubeEmbed';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import {formatIPFS} from "./utils"
 
 
 export default function NFTReveal(){
     let { nftId } = useParams();
     const [nft, setNft] = useState([])
     const [nftContent, setNftContent] = useState([])
+
+    const {walletAddress} = useSelector((state) => state.wallet)
 
     useEffect(() => {
         BackendService.getNftsByContractIds([nftId])
@@ -27,11 +31,10 @@ export default function NFTReveal(){
 
     async function revealContent(){
         const signature = await WalletService.signNftContent({nft: nftId})
-        const {coinbase} = WalletService.isLoggedIn()
         const payloadData = {
             proof: signature,
             nft: parseInt(nftId),
-            ethereumAddress: coinbase
+            ethereumAddress: walletAddress
         }
         BackendService.revealContent(payloadData)
         .then(_content => {
@@ -91,8 +94,8 @@ export default function NFTReveal(){
             alignItems="center">
                 <Grid item xs={12} lg={4} md={6}>
                     <NFTCardWithoutLink
-                    image={`https://${nft.imageIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
-                    imageLowRes={`https://${nft.imageLowResIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
+                    image={formatIPFS(nft.imageIpfsUri)}
+                    imageLowRes={formatIPFS(nft.imageLowResIpfsUri)}
                     />
                 </Grid>
             </Grid>

@@ -3,6 +3,8 @@ import './App.css';
 import Dashboard from './Dashboard';
 
 import { Routes, Route } from "react-router-dom";
+import { Provider } from 'react-redux'
+import store from './redux/store'
 
 import Container from '@mui/material/Container'
 import { GlobalStyles } from "@mui/material";
@@ -57,27 +59,29 @@ export default function App(){
 
     return (
     <div className="App">
-      <ThemeProvider theme={customTheme} >
-        <GlobalStyles
-          styles={{
-            body: { backgroundColor: "#F6EEEA" },
-          }}
-        />
-        <Container maxWidth="xl" style={{paddingTop: "2rem", minHeight: "100%"}}>
-        <Header></Header>
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/nft/:nftId" element={<NFTDetails />} />
-            <Route path="/nft/:nftId/reveal" element={<NFTReveal />} />
-            <Route path="/nft-by-type/:nftTypeId" element={<NFTList />} />
-            <Route path="/claim/:nftId" element={<ClaimDetails />} />
-            <Route path="/mint/" element={<NFTMinting />}></Route>
-            <Route path="/imprint/" element={<Imprint />}></Route>
-          </Routes>
-          <Footer></Footer>
-        </Container>
-      
-      </ThemeProvider>
+      <Provider store={store}>
+        <ThemeProvider theme={customTheme} >
+          <GlobalStyles
+            styles={{
+              body: { backgroundColor: "#F6EEEA" },
+            }}
+          />
+          <Container maxWidth="xl" style={{paddingTop: "2rem", minHeight: "100%"}}>
+          <Header></Header>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/nft/:nftId" element={<NFTDetails />} />
+              <Route path="/nft/:nftId/reveal" element={<NFTReveal />} />
+              <Route path="/nft-by-type/:nftTypeId" element={<NFTList />} />
+              <Route path="/claim/:nftId" element={<ClaimDetails />} />
+              <Route path="/mint/" element={<NFTMinting />}></Route>
+              <Route path="/imprint/" element={<Imprint />}></Route>
+            </Routes>
+            <Footer></Footer>
+          </Container>
+        
+        </ThemeProvider>
+      </Provider>
     </div>
     )
 }

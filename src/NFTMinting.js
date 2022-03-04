@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import { useSelector } from 'react-redux'
 import {
     useSearchParams,
     useNavigate,
@@ -19,6 +20,8 @@ export default function NFTMinting(){
     const [progress, setProgress] = useState(0)
     const [loadingSigning, setLoadingSigning] = useState(true)
 
+    const {walletAddress} = useSelector((state) => state.wallet)
+
     const [searchParams] = useSearchParams();
     const history = useNavigate();
     const spotifyToken = searchParams.get("code")
@@ -27,8 +30,7 @@ export default function NFTMinting(){
     useEffect(() => {
 
         function claimNFT(proof){
-            const {coinbase} = WalletService.isLoggedIn()
-            BackendService.performPreSave({ethereumAddress: coinbase, proof, spotifyToken, nft})
+            BackendService.performPreSave({ethereumAddress: walletAddress, proof, spotifyToken, nft})
             .then(() => {
                 setProgress(20)
                 // from now on, monitor claim tx, and adapt progress accordingly
@@ -43,8 +45,7 @@ export default function NFTMinting(){
         }
     
         function checkClaimStatus(){
-            const {coinbase} = WalletService.isLoggedIn()
-            BackendService.getDeploymentUserClaim(coinbase, nft)
+            BackendService.getDeploymentUserClaim(walletAddress, nft)
             .then((nftClaim) => {
 
                 if(nftClaim.txMined){
@@ -86,7 +87,7 @@ export default function NFTMinting(){
 
         initMinting()
         
-    }, [spotifyToken, nft, history])
+    }, [spotifyToken, nft, history, walletAddress])
 
     const nftCard = (
         <div>

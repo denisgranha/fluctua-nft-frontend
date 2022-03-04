@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import { useSelector } from 'react-redux'
 
 import Grid from "@mui/material/Grid";
 import Typography from '@mui/material/Typography';
@@ -8,13 +9,15 @@ import { CircularProgress } from "@mui/material";
 import NFTCard from "./components/NFTCard";
 import WalletService from "./services/wallet-service"
 import BackendService from "./services/backend-service"
+import {formatIPFS} from "./utils"
 import {ReactComponent as Infographic} from "./svgs/Asset1.svg"
 import {ReactComponent as Infographic2} from "./svgs/Asset2.svg"
 import {ReactComponent as Infographic3} from "./svgs/Asset3.svg"
 
 export default function Dashboard(){
 
- 
+  const {walletAddress} = useSelector((state) => state.wallet)
+
   const [nftTypes, setNftTypes] = useState([])
   const [ownedNftIds, setOwnedNftIds] = useState([])
   const [ownedNfts, setOwnedNfts] = useState([])
@@ -28,25 +31,24 @@ export default function Dashboard(){
 
     async function checkBalance(){
       // Check if user holds any nft, by looking at the contract
-      const {coinbase} = WalletService.isLoggedIn()
 
-      if(coinbase){
+      if(walletAddress){
         // If user has any token claim, it might have the token, so we warn the user to hold on, as it takes a few seconds
         // Blockchain is slow
-        BackendService.getUserClaims(coinbase)
+        BackendService.getUserClaims(walletAddress)
         .then(_claims => {
           setUserClaims(_claims)
         })
       }
 
-      if (coinbase){
-        const nftIds = await WalletService.getNfts(coinbase)
+      if (walletAddress){
+        const nftIds = await WalletService.getNfts(walletAddress)
         setOwnedNftIds(nftIds)
       }
     }
     
     checkBalance()
-  }, [])
+  }, [walletAddress])
 
   useEffect(()=> {
     if (ownedNftIds.length){
@@ -76,8 +78,8 @@ export default function Dashboard(){
               color={nftType.backgroundColor}
               title={nftType.name}
               subtitle={nftType.description}
-              image={`https://${nftType.representativeImageIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
-              imageLowRes={`https://${nftType.representativeImageLowResIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
+              image={formatIPFS(nftType.representativeImageIpfsUri)}
+              imageLowRes={formatIPFS(nftType.representativeImageLowResIpfsUri)}
             />
           </Grid>
         ))}
@@ -101,8 +103,8 @@ export default function Dashboard(){
               <Grid item xs={12} sm={5} lg={3} xl={2} key={nft.contractId}>
                   <NFTCard
                   destinationPath={`/nft/${nft.contractId}/reveal`}
-                  image={`https://${nft.imageIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
-                  imageLowRes={`https://${nft.imageLowResIpfsUri}.${process.env.REACT_APP_IPFS_URL}`}
+                  image={formatIPFS(nft.imageIpfsUri)}
+                  imageLowRes={formatIPFS(nft.imageLowResIpfsUri)}
                   />
               </Grid>
               ))}
