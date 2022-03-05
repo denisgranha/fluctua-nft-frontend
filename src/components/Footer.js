@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
-import { faFacebook, faTwitter, faInstagram, faLinkedin } from '@fortawesome/free-brands-svg-icons'
+import { faFacebook, faTwitter, faInstagram, faLinkedin, faGithub, faDiscord } from '@fortawesome/free-brands-svg-icons'
 import { Divider } from '@mui/material'
 import { Typography } from '@mui/material'
 import { Grid } from "@mui/material";
@@ -16,24 +16,34 @@ export default function Footer(){
                 </Typography>
                 <div style={{paddingTop: "2rem"}}>
                     <Grid container spacing={1}   justifyContent="center">
-                        <Grid item xs={3} sm={3} lg={1} xl={1}>
+                        <Grid item xs={2} sm={2} lg={1} xl={1}>
                             <a href="https://facebook.com/fluctuarecords" rel="noopener noreferrer" target="_blank">
                                 <FontAwesomeIcon icon={faFacebook}></FontAwesomeIcon>
                             </a>
                         </Grid>
-                        <Grid item xs={3} sm={3} lg={1} xl={1}>
+                        <Grid item xs={2} sm={2} lg={1} xl={1}>
                             <a href="https://twitter.com/FluctuaRecords" rel="noopener noreferrer" target="_blank">
                                 <FontAwesomeIcon icon={faTwitter}></FontAwesomeIcon>
                             </a>
                         </Grid>
-                        <Grid item xs={3} sm={3} lg={1} xl={1}>
+                        <Grid item xs={2} sm={2} lg={1} xl={1}>
                             <a href="https://www.linkedin.com/company/fluctuarecords" rel="noopener noreferrer" target="_blank">
                                 <FontAwesomeIcon icon={faLinkedin}></FontAwesomeIcon>
                             </a>
                         </Grid>
-                        <Grid item xs={3} sm={3} lg={1} xl={1}>
+                        <Grid item xs={2} sm={2} lg={1} xl={1}>
                             <a href="https://instagram.com/fluctuarecords" rel="noopener noreferrer" target="_blank">
                                 <FontAwesomeIcon icon={faInstagram}></FontAwesomeIcon>
+                            </a>
+                        </Grid>
+                        <Grid item xs={2} sm={2} lg={1} xl={1}>
+                            <a href="https://github.com/denisgranha/fluctua-nft-frontend" rel="noopener noreferrer" target="_blank">
+                                <FontAwesomeIcon icon={faGithub}></FontAwesomeIcon>
+                            </a>
+                        </Grid>
+                        <Grid item xs={2} sm={2} lg={1} xl={1}>
+                            <a href="https://discord.gg/Uw6rW54qRH" rel="noopener noreferrer" target="_blank">
+                                <FontAwesomeIcon icon={faDiscord}></FontAwesomeIcon>
                             </a>
                         </Grid>
                     </Grid>

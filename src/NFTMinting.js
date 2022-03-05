@@ -20,6 +20,7 @@ export default function NFTMinting(){
     const [showAnimation, setShowAnimation] = useState(false)
     const [progress, setProgress] = useState(0)
     const [loadingSigning, setLoadingSigning] = useState(true)
+    const [mintTx, setMintTx] = useState()
 
     const {walletAddress} = useSelector((state) => state.wallet)
 
@@ -28,6 +29,8 @@ export default function NFTMinting(){
     const spotifyToken = searchParams.get("code")
     const nft = searchParams.get("state")
     const dispatch = useDispatch()
+
+    const blockExplorerURL = process.env.REACT_APP_BLOCK_EXPLORER?process.env.REACT_APP_BLOCK_EXPLORER:"https://polygonscan.com/"
 
     useEffect(() => {
         // Toogle login
@@ -64,6 +67,7 @@ export default function NFTMinting(){
                 else if(nftClaim.txHash){
                     // @todo depending on how long ago, set progress accordingly
                     setProgress(60)
+                    setMintTx(nftClaim.txHash)
                     setTimeout(checkClaimStatus, 2000)
                 }
                 else {
@@ -103,6 +107,11 @@ export default function NFTMinting(){
             <Typography variant="h4" component="div">
                 NFT Minting in progress, hold on
             </Typography>
+            {mintTx?
+                <Typography variant="body1" component="div">
+                    transaction <a href={`${blockExplorerURL}/tx/${mintTx}`} target="_blank" rel="noreferrer"> {mintTx} </a>
+                </Typography>
+                :""}
             <LinearProgressWithLabel value={progress} />            
         </div>
     )
