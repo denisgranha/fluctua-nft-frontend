@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import {
     useSearchParams,
     useNavigate,
@@ -7,6 +7,7 @@ import {
 
 import WalletService from './services/wallet-service'
 import BackendService from "./services/backend-service"
+import { toogleAskWallet } from './redux/walletSlice'
 import {NFTCardWithoutLink} from "./components/NFTCard";
 import Grid from "@mui/material/Grid";
 import LinearProgressWithLabel from "./components/LinearProgressWithLabel"
@@ -26,6 +27,12 @@ export default function NFTMinting(){
     const history = useNavigate();
     const spotifyToken = searchParams.get("code")
     const nft = searchParams.get("state")
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        // Toogle login
+        dispatch(toogleAskWallet())
+    }, [dispatch])
 
     useEffect(() => {
 
@@ -85,7 +92,9 @@ export default function NFTMinting(){
             }, 1000)
         }
 
-        initMinting()
+        if(walletAddress){
+            initMinting()
+        }
         
     }, [spotifyToken, nft, history, walletAddress])
 

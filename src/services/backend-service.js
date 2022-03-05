@@ -7,6 +7,7 @@ async function getNftTypes(){
             return response.data.results
         }, error => {
             // Alert logic?
+            return Promise.reject(error)
     })
 }
 
@@ -16,6 +17,7 @@ async function getUserClaims(ethereumAddress){
           return response.data.results
         }, error => {
             // Alert logic?
+            return Promise.reject(error)
     })
 }
 
@@ -25,6 +27,7 @@ async function getNftsByContractIds(contractIds){
         return response.data.results
       }, error => {
         // Alert logic?
+        return Promise.reject(error)
     })
 }
 
@@ -33,7 +36,8 @@ async function revealContent(payloadData){
         .then(response => {
             return response.data
         }, error => {
-            // Alert logic?
+        // Alert logic?
+        return Promise.reject(error)
     })
 }
 
@@ -42,7 +46,8 @@ async function getNftsByType(typeId){
         .then(response => {
             return response.data.results
         }, error => {
-            // Alert logic?
+        // Alert logic?
+        return Promise.reject(error)
     })
 }
 
@@ -51,7 +56,8 @@ async function getDeploymentUserClaim(ethereumAddress, nftId){
         .then(response => {
             return response.data.results[0]
         }, error => {
-            // Alert logic?
+        // Alert logic?
+        return Promise.reject(error)
     })
 }
 
@@ -60,7 +66,8 @@ async function performPreSave(payload){
         .then(response => {
             return response.status
         }, error => {
-            // Alert logic?
+        // Alert logic?
+        return Promise.reject(error)
     })
 }
 

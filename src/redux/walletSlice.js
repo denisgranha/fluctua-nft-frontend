@@ -4,7 +4,8 @@ export const walletSlice = createSlice({
   name: 'wallet',
   initialState: {
     walletAddress: "",
-    walletProvider: ""
+    walletProvider: "",
+    askWallet: false
   },
   reducers: {
     login: (state, action) => {
@@ -13,7 +14,12 @@ export const walletSlice = createSlice({
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
       state.walletAddress = action.payload.walletAddress
+    },
+    chooseWallet: (state, action) => {
       state.walletProvider = action.payload.walletProvider
+    },
+    toogleAskWallet: (state)=> {
+      state.askWallet = !state.askWallet
     },
     logout: (state) => {
       state.walletAddress = ""
@@ -23,6 +29,6 @@ export const walletSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { login, logout } = walletSlice.actions
+export const { login, logout, chooseWallet, toogleAskWallet } = walletSlice.actions
 
 export default walletSlice.reducer

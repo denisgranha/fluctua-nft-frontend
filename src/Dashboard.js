@@ -32,7 +32,7 @@ export default function Dashboard(){
     async function checkBalance(){
       // Check if user holds any nft, by looking at the contract
 
-      if(walletAddress){
+      if(walletAddress){  
         // If user has any token claim, it might have the token, so we warn the user to hold on, as it takes a few seconds
         // Blockchain is slow
         BackendService.getUserClaims(walletAddress)
@@ -41,7 +41,7 @@ export default function Dashboard(){
         })
       }
 
-      if (walletAddress){
+      if (walletAddress){        
         const nftIds = await WalletService.getNfts(walletAddress)
         setOwnedNftIds(nftIds)
       }
@@ -49,6 +49,15 @@ export default function Dashboard(){
     
     checkBalance()
   }, [walletAddress])
+
+  useEffect(() => {
+    // This might be called when user logouts
+    if (!walletAddress && ownedNfts.length){
+      setUserClaims([])
+      setOwnedNfts([])
+      setOwnedNftIds([])
+    }
+  }, [walletAddress, ownedNfts])
 
   useEffect(()=> {
     if (ownedNftIds.length){

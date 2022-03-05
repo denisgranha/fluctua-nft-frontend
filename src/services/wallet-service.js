@@ -69,31 +69,25 @@ const _login = async () => {
 
     let coinbase; // Main account
 
-    // if (typeof window.ethereum !== 'undefined') {
-    //   console.log('MetaMask is installed!');
-    //   // Ask which wallet to use
-    //   try{
-    //     coinbase = await window.ethereum.request({ method: 'eth_requestAccounts' });
-    //   }
-    //   catch(e){
-    //     console.log(e)
-    //   }
-    // }
-
-    // Check it's logged in.
-    if (!(await fm.user.isLoggedIn())){
-      console.log("user not logged in")
-      
+    const {wallet: {walletProvider}} = store.getState()
+    
+    if (walletProvider === "metamask") {     
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });        
+      coinbase = ethers.utils.getAddress(accounts[0])      
     }
+    else{
+      // Check it's logged in.
+      if (!(await fm.user.isLoggedIn())){
+        console.log("user not logged in")
+        
+      }
 
-    const accounts = await provider.provider.enable();
-    coinbase = accounts[0]    
-
-    // // Save in localstorage
-    // localStorage.setItem("coinbase", coinbase)
+      const accounts = await provider.provider.enable();
+      coinbase = accounts[0]
+    }    
+    
     store.dispatch(login({
-      walletAddress: coinbase,
-      walletProvider: "fortmatic"
+      walletAddress: coinbase
     }))
 
     return {coinbase};
@@ -107,7 +101,8 @@ const _logout = async () => {
 const _signPreSave = async () => {
     
     const {coinbase} = await _login()
-    console.log("user ready to sign")
+    const {wallet: {walletProvider}} = store.getState()
+    console.log("user ready to sign", walletProvider)
     await delay(800)
 
     const domain = {
@@ -125,8 +120,16 @@ const _signPreSave = async () => {
         wallet: coinbase
     }
 
-    const signer = provider.getSigner()
-    const signature = await signer._signTypedData(domain, types, values);
+    let signature
+    if (walletProvider === "metamask"){
+      const metamaskProvider = new ethers.providers.Web3Provider(window.ethereum)
+      const signer = metamaskProvider.getSigner()
+      signature = await signer._signTypedData(domain, types, values);
+    }
+    else{
+      const signer = provider.getSigner()
+      signature = await signer._signTypedData(domain, types, values);
+    }    
 
     return signature;
 }
@@ -135,6 +138,7 @@ const _signNftContent = async ({nft}) => {
 
   // Check it's logged in.
   const {coinbase} = await _login()
+  const {wallet: {walletProvider}} = store.getState()
 
   console.log("user ready to sign")
   await delay(800)
@@ -156,9 +160,16 @@ const _signNftContent = async ({nft}) => {
       nft: parseInt(nft)
   }
 
-  const signer = provider.getSigner()
-  const signature = await signer._signTypedData(domain, types, values);
-
+  let signature
+  if (walletProvider === "metamask"){
+    const metamaskProvider = new ethers.providers.Web3Provider(window.ethereum)
+    const signer = metamaskProvider.getSigner()
+    signature = await signer._signTypedData(domain, types, values);
+  }
+  else{
+    const signer = provider.getSigner()
+    signature = await signer._signTypedData(domain, types, values);
+  } 
   return signature;
 }
 
